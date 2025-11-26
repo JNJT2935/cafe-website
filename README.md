@@ -5,17 +5,22 @@ This repository contains the source code for the Café Website, a web-based plat
 
 ## Project Structure
 
-/root
- ├── index.php
- ├── README.md
- ├── /assets
- │     ├── /css
- │     ├── /js
- │     ├── /images
- │     └── /includes
- ├── /pages
- ├── /backend
- │     └── /database
+- /root
+    - /index.php
+    - /README.md
+    - /assets
+        - /css
+        - /js
+        - /images
+        - /includes
+    - /pages
+        - /home
+        - /about us
+        - /menu
+        - /cart
+        - /user profile
+    - /backend
+        - /database
 
 ## 🛠️ Tech Stack 
 
