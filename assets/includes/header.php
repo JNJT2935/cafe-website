@@ -4,7 +4,7 @@
     <div class="header-left">
         <!-- LOGO -->
         <a href="pages/Home_Page.php" class="logo">
-            <img src="assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
+            <img src="..\assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
             <span>Coffee Shop</span>
         </a>
     </div>
@@ -27,7 +27,7 @@
             <i class="fa-regular fa-user"></i>
         </a>
 
-        <a href="" class="header-icon">
+        <a href="..\..\pages\cart_page.php" class="header-icon">
             <i class="fa-solid fa-cart-shopping"></i>
         </a>
         <a href="" class="header-icon">
