@@ -7,7 +7,6 @@
 
 body {
     font-family: Arial, sans-serif;
-    overflow-x: hidden;              /* FIX: no sideways scrolling */
     background-color: #cfbca6;
 }
 
@@ -19,22 +18,22 @@ body {
     width: 100%;
     min-height: 100vh;
     position: relative;
-    padding-top: 120px;              /* space so content doesn't hide behind header */
+    padding-top: 40px;              /* space so content doesn't hide behind header */
 }
 
 .cart-container {
     max-width: 1200px;
     margin: auto;
-    padding: 40px 20px;
+    padding: auto;
     display: grid;
-    grid-template-columns: 65% 35%;
-    gap: 30px;
+    grid-template-columns: 60% 40%;
+    gap: 50px;
 }
 
 /* LEFT SIDE CONTENT (items) */
 .back-to-shop {
-    margin-bottom: 20px;
-    font-size: 28px;
+    margin-bottom: 30px;
+    font-size: 32px;
     color: #000000;
     display: inline-block;
 }
@@ -42,7 +41,7 @@ body {
 .cart-items {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 200px;
 }
 
 /* CART ITEM CARD */
@@ -50,7 +49,7 @@ body {
     background: #fff;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     display: flex;
     align-items: center;
     gap: 20px;
@@ -65,22 +64,35 @@ body {
 
 /* item text & quantity */
 .cart-item-info {
-    flex-grow: 1;
+    flex-grow: 2;
+    object-position: center;
 }
 
 .quantity-control {
+    size: 30px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
+/* RIGHT SIDE (promo) */
+.promo-card {
+    margin-top: 65px;
+    background: #f2eded;
+    size: 30px;
+    padding: 10px;
+    border-radius: 25px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin-bottom: 10px;
+}
 
 /* RIGHT SIDE (promo + summary) */
-.side-card {
+.summary-card {
+    margin-top: 30px;
     background: #fff;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* SUMMARY BLOCK */
@@ -94,12 +106,37 @@ body {
     font-size: 20px;
     font-weight: bold;
 }
+/* promo button */
+.promo-input-group {
+    display: flex;
+    gap: 10px; /* space between input and button */
+}
+
+.promo-input-group input {
+    flex: 1; /* input takes remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.promo-btn {
+    padding: 10px 20px;
+    background: #e6a823;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    white-space: nowrap; /* keeps "Apply" text on one line */
+}
+
 
 /* CHECKOUT BUTTON */
 .checkout-btn {
     width: 100%;
     padding: 14px;
-    background: #bb840f;
+    background: #e6a823;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -108,7 +145,8 @@ body {
 }
 
 .checkout-btn:hover {
-    background: #7b4703fd;
+    background: #a86008fd;
+    transition: 0.2s;
 }
 
 /* RESPONSIVE */

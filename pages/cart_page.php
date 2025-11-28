@@ -29,7 +29,7 @@
         <div class="cart-container">
             <!-- LEFT SIDE — ITEMS -->
             <div class="cart-left">
-                <a href="menu.php" class="back-to-shop">← Back to shopping</a>
+                <a href="menu.php" class="back-to-shop">← Back to shopping  </a>
                 <div class="cart-items">
                     <!-- ITEM CARD (Repeat using PHP later) -->
                     <div class="cart-item-card">
@@ -38,12 +38,11 @@
                         <div class="cart-item-info">
                             <h3>Product Name</h3>
                             <p>Short description goes here</p>
-
-                            <div class="quantity-control">
-                                <button>-</button>
-                                <span>1</span>
-                                <button>+</button>
-                            </div>
+                        </div>
+                        <div class="quantity-control">
+                            <button>-</button>
+                            <span>1</span>
+                            <button>+</button>
                         </div>
                         <div class="item-price">
                             <strong>Rs 120</strong>
@@ -54,13 +53,16 @@
             <!-- RIGHT SIDE — SUMMARY -->
             <div class="cart-right">
                 <!-- PROMO CODE -->
-                <div class="side-card">
+                <div class="promo-card">
                     <h3>Promo Code</h3>
-                    <input type="text" placeholder="Enter your promo code">
-                    <button class="checkout-btn" style="margin-top: 10px;">Apply</button>
+                    <div class="promo-input-group">
+                        <input type="text" placeholder="Enter your promo code">
+                        <button class="promo-btn">Apply</button>
+                    </div>
                 </div>
+
                 <!-- SUMMARY CARD -->
-                <div class="side-card">
+                <div class="summary-card">
                     <h3>Order Summary</h3>
 
                     <div class="summary-row">
