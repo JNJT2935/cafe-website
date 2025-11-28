@@ -76,32 +76,35 @@
             </div>       
             <!-- RIGHT SIDE — SUMMARY -->
             <div class="cart-right">
-                <!-- PROMO CODE -->
-                <div class="promo-card">
-                    <h3>Promo Code</h3>
-                    <div class="promo-input-group">
-                        <input type="text" placeholder="Enter your promo code">
-                        <button class="promo-btn">Apply</button>
-                    </div>
-                </div>
-
+                
                 <!-- SUMMARY CARD -->
                 <div class="summary-card">
-                    <h3>Order Summary</h3>
+                    <h3 class="summary-title">Order Summary</h3>
+
+                    <div class="summary-row">
+                        <span>Number of Items</span>
+                        <span>3</span>
+                    </div>
+
+                    <hr class="summary-divider">
 
                     <div class="summary-row">
                         <span>Subtotal</span>
-                        <span>Rs 120</span>
+                        <span>Rs 200</span>
                     </div>
 
+                    <hr class="summary-divider">
+
                     <div class="summary-row">
-                        <span>Delivery Fee</span>
-                        <span>Rs 50</span>
+                        <span>Discount</span>
+                        <span>Rs 0</span>
                     </div>
+
+                    <hr class="summary-divider">
 
                     <div class="summary-row summary-total">
                         <span>Total</span>
-                        <span>Rs 170</span>
+                        <span>Rs 200</span>
                     </div>
 
                     <button class="checkout-btn" onclick="window.location.href='checkout.php'">

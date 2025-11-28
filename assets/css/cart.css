@@ -7,7 +7,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #cfbca6;
+    background-color: #BA9D8A;
 }
 
 .cart-background {
@@ -72,7 +72,7 @@ body {
     height: 35px;
     font-size: 20px;
     border: none;
-    background-color: #e6a823;
+    background-color: #B3826C;
     color: white;
     border-radius: 6px;
     cursor: pointer;
@@ -82,17 +82,6 @@ body {
     min-width: 20px;
     text-align: center;
     font-weight: bold;
-}
-
-/* RIGHT SIDE (promo) */
-.promo-card {
-    margin-top: 65px;
-    background: #f2eded;
-    size: 30px;
-    padding: 10px;
-    border-radius: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    margin-bottom: 10px;
 }
 
 .remove-item-btn {
@@ -108,74 +97,63 @@ body {
     color: #c9302c;
 }
 
-
-/* RIGHT SIDE (promo + summary) */
+/* SUMMARY BLOCK */
 .summary-card {
-    margin-top: 30px;
+    margin-top: 65px;
     background: #fff;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     margin-bottom: 10px;
+    text-align: center; /* centers the title */
 }
 
-/* SUMMARY BLOCK */
+.summary-title {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+}
+
 .summary-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
+    font-size: 16px;
+    color: #444;
+}
+
+.summary-divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 12px 0;
 }
 
 .summary-total {
     font-size: 20px;
     font-weight: bold;
+    margin-top: 10px;
 }
-/* promo button */
-.promo-input-group {
-    display: flex;
-    gap: 10px; /* space between input and button */
-}
-
-.promo-input-group input {
-    flex: 1; /* input takes remaining space */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-.promo-btn {
-    padding: 10px 20px;
-    background: #e6a823;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    white-space: nowrap; /* keeps "Apply" text on one line */
-}
-
-.promo-btn:hover {
-    background: #a86008fd;
-}
-
 
 /* CHECKOUT BUTTON */
 .checkout-btn {
     width: 100%;
     padding: 14px;
-    background: #e6a823;
+    background: #B3826C;
     color: #fff;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 20px;
 }
 
 .checkout-btn:hover {
-    background: #a86008fd;
+    background: #6F4E37;
     transition: 0.2s;
 }
+
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
