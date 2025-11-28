@@ -18,6 +18,7 @@
     <!-- CSS FILES -->
     <link rel="stylesheet" href="..\assets\css\header.css">
     <link rel="stylesheet" href="..\assets\css\cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -41,12 +42,15 @@
                         </div>
                         <div class="quantity-control">
                             <button>-</button>
-                            <span>1</span>
+                            <span>0</span>
                             <button>+</button>
                         </div>
                         <div class="item-price">
                             <strong>Rs 120</strong>
                         </div>
+                        <button class="remove-item-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>       
