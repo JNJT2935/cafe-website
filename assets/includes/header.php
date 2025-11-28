@@ -27,7 +27,7 @@
             <i class="fa-regular fa-user"></i>
         </a>
 
-        <a href="..\..\pages\cart_page.php" class="header-icon">
+        <a href="..\pages\cart_page.php" class="header-icon">
             <i class="fa-solid fa-cart-shopping"></i>
         </a>
         <a href="" class="header-icon">

@@ -42,7 +42,7 @@
                         </div>
                         <div class="quantity-control">
                             <button>-</button>
-                            <span>0</span>
+                            <span>1</span>
                             <button>+</button>
                         </div>
                         <div class="item-price">
@@ -52,6 +52,26 @@
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
+                    <div class="cart-item-card">
+                        <img src="assets/images/sample-item.jpg" alt="Item">
+
+                        <div class="cart-item-info">
+                            <h3>Product Name</h3>
+                            <p>Short description goes here</p>
+                        </div>
+                        <div class="quantity-control">
+                            <button>-</button>
+                            <span>1</span>
+                            <button>+</button>
+                        </div>
+                        <div class="item-price">
+                            <strong>Rs 80</strong>
+                        </div>
+                        <button class="remove-item-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    
                 </div>
             </div>       
             <!-- RIGHT SIDE — SUMMARY -->
