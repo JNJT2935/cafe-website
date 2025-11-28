@@ -1,6 +1,3 @@
-<?php 
-    session_start(); 
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,9 +16,7 @@
     <title>Coffee Shop | Cart</title>
 
     <!-- CSS FILES -->
-    <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="..\assets\css\header.css">
-    <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="..\assets\css\cart.css">
 </head>
 

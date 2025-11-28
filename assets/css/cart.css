@@ -99,7 +99,7 @@ body {
 .checkout-btn {
     width: 100%;
     padding: 14px;
-    background: #2b69c0;
+    background: #bb840f;
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -108,7 +108,7 @@ body {
 }
 
 .checkout-btn:hover {
-    background: #a93226;
+    background: #7b4703fd;
 }
 
 /* RESPONSIVE */
