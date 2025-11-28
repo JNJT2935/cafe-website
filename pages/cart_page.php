@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="..\assets\css\header.css">
     <link rel="stylesheet" href="..\assets\css\cart.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="..\assets\css\cart_footer.css">
 </head>
 
 <body>
@@ -116,7 +117,7 @@
     </div>
 
     <!-- Footer -->
-    <?php include '../includes/footer.php'; ?>
+    <?php include '../assets/includes/cart_footer.php'; ?>
 
     <!-- JS -->
     <script src="/js/cart.js"></script>
