@@ -4,7 +4,7 @@
     <div class="header-left">
         <!-- LOGO -->
         <a href="pages/Home_Page.php" class="logo">
-            <img src="assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
+            <img src="..\assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
             <span>Coffee Shop</span>
         </a>
     </div>
