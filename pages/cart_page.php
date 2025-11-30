@@ -14,7 +14,7 @@
 
     <!-- Title -->
     <title>Coffee Shop | Cart</title>
-
+ 
     <!-- CSS FILES -->
     <link rel="stylesheet" href="..\assets\css\header.css">
     <link rel="stylesheet" href="..\assets\css\cart.css">
@@ -27,10 +27,10 @@
     <!-- Header -->
     <?php include '..\assets\includes\header.php'; ?>
 
-    <div class="cart-background">
+    <main class="cart-background">
         <div class="cart-container">
             <!-- LEFT SIDE — ITEMS -->
-            <div class="cart-left">
+            <section class="cart-left">
                 <a href="menu.php" class="back-to-shop">← Back to shopping  </a>
                 <div class="cart-items">
                     <!-- ITEM CARD (Repeat using PHP later) -->
@@ -74,9 +74,9 @@
                     </div>
                     
                 </div>
-            </div>       
+            </section>       
             <!-- RIGHT SIDE — SUMMARY -->
-            <div class="cart-right">
+            <section class="cart-right">
                 
                 <!-- SUMMARY CARD -->
                 <div class="summary-card">
@@ -108,13 +108,13 @@
                         <span>Rs 200</span>
                     </div>
 
-                    <button class="checkout-btn" onclick="window.location.href='checkout.php'">
+                    <button class="checkout-btn" onclick="window.location.href='checkout_page.php'">
                         Proceed to Checkout
                     </button>
                 </div>
-            </div>
+            </section>
         </div>
-    </div>
+    </main>
 
     <!-- Footer -->
     <?php include '../assets/includes/cart_footer.php'; ?>
