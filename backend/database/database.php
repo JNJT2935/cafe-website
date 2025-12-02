@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 $servername = 'localhost';
-$database = 'php';
+$database = 'coffee_shop';
 $username = 'root';
 $password = '';
 $conn = mysqli_connect($servername, $username, $password, $database);
