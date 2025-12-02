@@ -19,7 +19,7 @@ include('../backend/database/database.php');
 if (isset($_POST['submit'])) {
   $filename = $_FILES["file"]["name"];
   $tempname = $_FILES["file"]["tmp_name"];
-  $folder = "../assets/images/productimages" . $filename;
+  $folder = "../assets/images/productimages/" . $filename;
 
   if ($_FILES["file"]["error"] !== UPLOAD_ERR_OK) {
     if ($_FILES["file"]["error"] == 4) {
