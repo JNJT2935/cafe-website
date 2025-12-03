@@ -1,3 +1,23 @@
+<?php
+session_start();
+include "../backend/database/db.php";
+
+$user_id = 1;
+
+// Check if cart is empty
+$stmt = $conn->prepare("SELECT COUNT(*) AS count FROM cart WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+if ($row['count'] == 0) {
+    $_SESSION['cart_warning'] = "Your cart is empty. Add items before checking out.";
+    header("Location: cart_page.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

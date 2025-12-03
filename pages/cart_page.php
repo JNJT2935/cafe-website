@@ -1,3 +1,52 @@
+<?php
+session_start();
+include "../backend/database/db.php";
+
+// For now use a static user_id until login system exists
+$user_id = 1;
+
+// Fetch cart items
+$sql = "SELECT 
+            c.cart_id,
+            c.quantity,
+            p.product_id,
+            p.name,
+            p.description,
+            p.price,
+            p.source_image
+        FROM cart c
+        INNER JOIN product p ON c.product_id = p.product_id
+        WHERE c.user_id = $user_id";
+
+$result = $conn->query($sql);
+
+$cart_items = [];
+$cart_total = 0;
+$total_quantity = 0;
+$item_count = 0;
+$total_quantity = 0;
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+
+        // Compute item total
+        $row['item_total'] = $row['price'] * $row['quantity'];
+        // Add to cart array
+        $cart_items[] = $row;
+        // Add to full cart total
+        $cart_total += $row['item_total'];
+    }
+
+    //computer number of individual item
+    $item_count = count($cart_items);
+
+    // compute the total number if item
+    foreach ($cart_items as $item) {
+        $total_quantity += $item['quantity'];
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +71,9 @@
     <link rel="stylesheet" href="..\assets\css\cart_footer.css">
 </head>
 
+<!-- JS -->
+    <script src="../assets/js/cart.js"></script>
+
 <body>
 
     <!-- Header -->
@@ -32,47 +84,40 @@
             <!-- LEFT SIDE — ITEMS -->
             <section class="cart-left">
                 <a href="menu.php" class="back-to-shop">← Back to shopping  </a>
+
                 <div class="cart-items">
-                    <!-- ITEM CARD (Repeat using PHP later) -->
-                    <div class="cart-item-card">
-                        <img src="assets/images/sample-item.jpg" alt="Item">
+                    <?php if (empty($cart_items)): ?>
+                        <p>Your cart is empty.</p>
+                    <?php else: ?>
+                        <p>You have <?php echo $item_count; ?> items in your cart</p>
 
-                        <div class="cart-item-info">
-                            <h3>Product Name</h3>
-                            <p>Short description goes here</p>
-                        </div>
-                        <div class="quantity-control">
-                            <button>-</button>
-                            <span>1</span>
-                            <button>+</button>
-                        </div>
-                        <div class="item-price">
-                            <strong>Rs 120</strong>
-                        </div>
-                        <button class="remove-item-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    <div class="cart-item-card">
-                        <img src="assets/images/sample-item.jpg" alt="Item">
+                        <?php foreach ($cart_items as $item): ?>
+                            <div class="cart-item-card" >
+                                <img src="<?php echo $item['source_image']; ?>" alt="item image">
 
-                        <div class="cart-item-info">
-                            <h3>Product Name</h3>
-                            <p>Short description goes here</p>
-                        </div>
-                        <div class="quantity-control">
-                            <button>-</button>
-                            <span>1</span>
-                            <button>+</button>
-                        </div>
-                        <div class="item-price">
-                            <strong>Rs 80</strong>
-                        </div>
-                        <button class="remove-item-btn">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                    
+                                    <div class="cart-item-info">
+                                        <h3><?php echo $item['name']; ?></h3>
+                                        <p><?php echo $item['description']; ?></p>
+                                    </div>
+
+                                    <div class="quantity-control">
+                                        <button class="qty-minus" data-cart-id="<?php echo $item['cart_id']; ?>" >-</button>
+                                        <span class="qty-value" data-cart-id="qty-<?php echo $item['cart_id']; ?>">
+                                            <?php echo $item['quantity']; ?>
+                                        </span>
+                                        <button class="qty-plus" data-cart-id="<?php echo $item['cart_id']; ?>">+</button>
+                                    </div>
+
+                                    <div class="item-price"  data-cart-id="<?php echo $item['cart_id']; ?>" >
+                                        <strong>Rs <?php echo number_format($item['item_total'], 2); ?></strong>
+                                    </div>
+
+                                    <button class="delete-item" data-cart-id="<?php echo $item['cart_id']; ?>">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </section>       
             <!-- RIGHT SIDE — SUMMARY -->
@@ -83,34 +128,37 @@
                     <h3 class="summary-title">Order Summary</h3>
 
                     <div class="summary-row">
-                        <span>Number of Items</span>
-                        <span>3</span>
+                        <span>Number of Individual items</span>
+                        <span><?php echo $item_count; ?></span>
                     </div>
 
                     <hr class="summary-divider">
 
                     <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span>Rs 200</span>
+                        <span>Total Number of items</span>
+                        <span><?php echo $total_quantity; ?></span>
                     </div>
 
                     <hr class="summary-divider">
-
-                    <div class="summary-row">
-                        <span>Discount</span>
-                        <span>Rs 0</span>
-                    </div>
-
-                    <hr class="summary-divider">
-
+                    
                     <div class="summary-row summary-total">
                         <span>Total</span>
-                        <span>Rs 200</span>
+                        <span> Rs <?php echo number_format($cart_total, 2); ?></span>
                     </div>
 
                     <button class="checkout-btn" onclick="window.location.href='checkout_page.php'">
                         Proceed to Checkout
                     </button>
+                    
+                    <?php if (isset($_SESSION['cart_warning'])): ?>
+                        <div class="toast-warning">
+                            <?php 
+                                echo $_SESSION['cart_warning']; 
+                                unset($_SESSION['cart_warning']);
+                            ?>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
             </section>
         </div>
@@ -119,7 +167,6 @@
     <!-- Footer -->
     <?php include '../assets/includes/cart_footer.php'; ?>
 
-    <!-- JS -->
-    <script src="/js/cart.js"></script>
+    
 </body>
 </html>

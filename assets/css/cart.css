@@ -56,6 +56,13 @@ body {
     gap: 20px;
     flex-wrap: wrap; /* helps on smaller screens */
 }
+.cart-item-card img {
+    width: 80px;       /* fixed width */
+    height: 80px;      /* fixed height */
+    border-radius: 8px;
+    object-fit: cover; /* ensures the image fills without distortion */
+    flex-shrink: 0;    /* prevents shrinking in flex layouts */
+}
 
 .cart-item-info {
     flex: 1;
@@ -78,13 +85,17 @@ body {
     cursor: pointer;
 }
 
+.quantity-control button:hover{
+    background: #6F4E37;
+}
+
 .quantity-control span {
-    min-width: 20px;
+    min-width: 1px;
     text-align: center;
     font-weight: bold;
 }
 
-.remove-item-btn {
+.delete-item {
     background: none;
     border: none;
     color: #000000;
@@ -93,7 +104,7 @@ body {
     margin-left: 10px;
 }
 
-.remove-item-btn:hover {
+.delete-item :hover {
     color: #c9302c;
 }
 
@@ -160,6 +171,32 @@ body {
     max-height: 0;
     opacity: 0;
     transition: all 0.3s ease;
+}
+
+.toast-warning {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+    padding: 15px 22px;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    animation: slideRight 0.4s ease, fadeOut 0.5s ease 3s forwards;
+    z-index: 9999;
+    max-width: 260px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateX(20px); }
 }
 
 
