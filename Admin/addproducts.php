@@ -4,7 +4,7 @@
     
     <div class="header-left">
         <!-- LOGO -->
-        <a href="pages/Home_Page.php" class="logo">
+        <a href="../pages/Home_Page.php" class="logo">
             <img src="..\assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
             <span>Coffee Shop</span>
         </a>
@@ -56,9 +56,9 @@ if (isset($_POST['submit'])) {
 
   $query = "INSERT INTO product (Product_id, name, category, image_source, description, stock_quantity, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
   $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "issssii", $id, $product_name, $category, $filename, $desc , $stock, $price);
+  mysqli_stmt_bind_param($stmt, "issssid", $id, $product_name, $category, $filename, $desc , $stock, $price);
   if (mysqli_stmt_execute($stmt)) {
-    header("Location: listing.php");
+    header("Location: ../pages/Home_Page.php");
   } else {
     echo "Error occurred while inserting data.";
   }
@@ -69,8 +69,8 @@ if (isset($_POST['submit'])) {
 <html>
 
 <head>
-  <title>products</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Add products</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
