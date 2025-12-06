@@ -4,11 +4,11 @@ include "../backend/database/db.php";
 
 $user_id = 1;
 
-// Check if cart is empty
-$stmt = $conn->prepare("SELECT COUNT(*) AS count FROM cart WHERE user_id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
+// Check if cart is empty before giving access
+$is_empty = $conn->prepare("SELECT COUNT(*) AS count FROM cart WHERE user_id = ?");
+$is_empty->bind_param("i", $user_id);
+$is_empty->execute();
+$result = $is_empty->get_result();
 $row = $result->fetch_assoc();
 
 if ($row['count'] == 0) {
@@ -16,6 +16,44 @@ if ($row['count'] == 0) {
     header("Location: cart_page.php");
     exit;
 }
+//fetch items cart
+$sql = "SELECT 
+            c.user_id,
+            c.quantity,
+            p.product_id,
+            p.name AS product_name,
+            p.price,
+            p.source_image,
+            u.name AS user_name,
+            u.phoneNo
+        FROM cart c
+        INNER JOIN product p ON c.product_id = p.product_id
+        INNER JOIN user u ON c.user_id = u.user_id
+        WHERE c.user_id = $user_id";
+
+$result = $conn->query($sql);
+
+$cart_items = [];
+$cart_total = 0;
+$user_name = "";
+$user_phone_number = "";
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+
+        // Compute item total
+        $row['item_total'] = $row['price'] * $row['quantity'];
+        // Add to cart array
+        $cart_items[] = $row;
+        // Add to full cart total
+        $cart_total += $row['item_total'];
+        //name
+        $user_name = $row['user_name'];
+        //phone number
+        $user_phone_number = $row['phoneNo'];
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +64,7 @@ if ($row['count'] == 0) {
     <title>Checkout</title>
 
     <!-- Global + Checkout CSS -->
-    <link rel="stylesheet" href="../assets/css/checkout_page.css">
+    <link rel="stylesheet" href="..\assets\css\checkout_page.css">
     <link rel="stylesheet" href="..\assets\css\header.css">
     <link rel="stylesheet" href="..\assets\css\cart_footer.css">
 </head>
@@ -43,27 +81,27 @@ if ($row['count'] == 0) {
         </div>
 
         <form class="checkout-container" id="checkout-form" action="process_order.php" method="POST" novalidate>
-
             <!-- LEFT: Order Summary -->
             <section class="checkout-left">
 
                 <h2>Delivery Method</h2>
 
                 <div class="radio-row">
-                    <label><input type="radio" name="fulfillment" value="delivery" checked> Delivery</label>
-                    <label><input type="radio" name="fulfillment" value="pickup"> Pickup</label>
+                    <label><input type="radio" name="fulfillment" value="delivery" id="delivery" checked> Delivery</label>
+                    <label><input type="radio" name="fulfillment" value="pickup" id="pickup"> Pickup</label>
                 </div>
 
                 <!-- DELIVERY FIELDS (visible by default) -->
                 <div class="slide-panel" id="delivery-panel" aria-hidden="false">
-                    <div class="input-field">
-                        <label for="customer-name">Full Name</label>
-                        <input id="customer-name" name="customer_name" type="text" required>
-                    </div>
-
-                    <div class="input-field">
-                        <label for="phone">Phone Number</label>
-                        <input id="phone" name="phone" type="tel" required >
+                    <div class="user-info">
+                        <div class="info-block">
+                            <H3>Full Name</H3>
+                            <p><?php echo $user_name; ?></p>
+                        </div>
+                        <div class="info-block">
+                            <H3>Phone Number</H3>
+                            <p><?php echo $user_phone_number; ?></p>
+                        </div>
                     </div>
 
                     <div class="input-field">
@@ -72,6 +110,21 @@ if ($row['count'] == 0) {
                     </div>
 
                 </div>
+                
+                <!-- DELIVARY DATE FIELDS (visible by default) -->
+                <div class="datetime-section">
+                    <div class="datetime-field">
+                        <label for="order-date">Select Date</label>
+                        <input type="date" id="order-date" name="order_date" required>
+                    </div>
+
+                    <div class="datetime-field">
+                        <label for="order-time">Select Time</label>
+                        <input type="time" id="order-time" name="order_time" required>
+                    </div>
+                </div>
+
+
 
                 <!-- PICKUP FIELDS (hidden by default) -->
                 <div class="slide-panel hidden" id="pickup-panel" aria-hidden="true">
@@ -85,14 +138,17 @@ if ($row['count'] == 0) {
                             <option value="Grand Baie">Grand Baie</option>
                             <option value="Quatre Bornes">Quatre Bornes</option>
                         </select>
+                        <!-- Keep phone & name for pickup as well -->
+                        <div class="user-info">
+                        <div class="info-block">
+                            <H3>Full Name</H3>
+                            <p><?php echo $user_name; ?></p>
+                        </div>
+                        <div class="info-block">
+                            <H3>Phone Number</H3>
+                            <p><?php echo $user_phone_number; ?></p>
+                        </div>
                     </div>
-
-                    <!-- Keep phone & name for pickup as well -->
-                    
-
-                    <div class="input-field">
-                        <label for="pickup-name">Full Name</label>
-                        <input id="pickup-name" name="pickup_name" type="text" >
                     </div>
                 </div>
                 <hr>
@@ -101,9 +157,9 @@ if ($row['count'] == 0) {
                 <div class="payment-options">
                     <label><input type="radio" name="payment" value="cash" checked> Cash on Delivery</label>
                     <label><input type="radio" name="payment" value="card"> Debit / Credit Card</label>
-                    <label><input type="radio" name="payment" value="paynow"> Pay Now</label>
+                    <label><input type="radio" name="payment" value="paynow"> Scan to pay (Juice/My.t Money/Paypal)</label>
                 </div>
-
+                <!-- card details expandable (hidden by default) -->
                 <div id="card-section" class="card-section hidden" aria-hidden="true">
                     <div class="input-field">
                     <label for="card-number">Card Number</label>
@@ -113,7 +169,7 @@ if ($row['count'] == 0) {
                     <div class="two-col">
                     <div class="input-field">
                         <label for="expiry">Expiry (MM/YY)</label>
-                        <input id="expiry" name="card_expiry" type="text" maxlength="5" placeholder="MM/YY">
+                        <input id="expiry" name="card_expiry" type="text" maxlength="4" placeholder="MM/YY">
                     </div>
                     <div class="input-field">
                         <label for="cvv">CVV</label>
@@ -122,32 +178,42 @@ if ($row['count'] == 0) {
                     </div>
                 </div>
 
+                <!-- Hidden expandable Pay Now section -->
+                <div id="paynow_details" class="paynow-box hidden" aria-hidden="true">
+                    <p><strong>Scan the QR Code to Pay:</strong></p>
+
+                    <div class="qr-container" id="pay_code">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=FakePayment12345"
+                            alt="Payment QR Code">
+                    </div>
+
+                    <p style="font-size: 14px; color: #555;">
+                        (This QR is auto-generated and for assignment/demo purposes only.)
+                    </p>
+                </div>
+
+
             </section>
 
             <!-- RIGHT: Delivery & Payment -->
              <section class="checkout-right">
                 <h2>Order Summary</h2>
 
-                <div class="order-items" id="order-items">
-                    <!-- Replace these with PHP loop printing $_SESSION['cart'] -->
+                <?php foreach ($cart_items as $item): ?>
                     <div class="order-item">
-                    <p>Chocolate Cake × 1</p>
-                    <span>Rs 150</span>
+                            <p><?php echo $item['product_name']; ?> × <?php echo $item['quantity']; ?></p>
+                            <span>Rs <?php echo $item['item_total']; ?></span>
                     </div>
-                    <div class="order-item">
-                    <p>Strawberry Smoothie × 2</p>
-                    <span>Rs 200</span>
-                    </div>
-                </div>
+                <?php endforeach; ?>
 
-                <div class="promo-field">
-                    <input type="text" name="promo" placeholder="Promo code" />
-                    <button type="button" id="apply-promo">Apply</button>
+                <div class="order-item">
+                    <p>Delivery Fee </p>
+                    <p>Rs <span id="delivery-fee">0</span></p>
                 </div>
 
                 <div class="total-box">
-                    <p>Subtotal</p>
-                    <h3 id="total-amount">Rs 350</h3>
+                    <strong>TOTAL :</strong>
+                    <h3 id="final-total" data-base-total="<?php echo $cart_total; ?>"><?php echo $cart_total; ?></h3>
                 </div>
 
                 <button type="submit" class="checkout-btn">Place Order</button>
@@ -155,6 +221,7 @@ if ($row['count'] == 0) {
                 <div class="small-link">
                     <a href="../pages/cart_page.php" class="cancel-link">Cancel / Back to cart</a>
                 </div>
+                
             </section>
             
         </form>

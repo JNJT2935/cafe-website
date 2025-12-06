@@ -46,8 +46,9 @@ body {
     text-align: center;
  }
  .checkout-right {
-    height: 100%;
-    max-height: 450px; 
+    height:fit-content;
+    min-height: 340px;
+    max-height: 2040px; 
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -55,11 +56,7 @@ body {
 
 /* order items */
 .order-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom: 1px solid #f0eae0; }
-.promo-field { display:flex; gap:10px; margin-top:12px; }
-.promo-field input { flex:1; padding:10px; border:1px solid #e6d9cc; border-radius:8px; }
-.promo-field button { padding:10px 14px; background:#e6a823; color:white; border:none; border-radius:8px; cursor:pointer; }
-.promo-field button:hover { background: #a86008fd}
-
+.delivery_fee { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom: 1px solid #f0eae0; }
 /* total & place order */
 .total-box { display:flex; justify-content:space-between; align-items:center; padding:12px; background:#fbf8f6; margin-top:14px; border-radius:8px; }
 .checkout-btn { width:100%; margin-top:16px; padding:12px; border-radius:8px; background:#e6a823; color:white; border:none; cursor:pointer; font-weight:600; }
@@ -93,6 +90,35 @@ body {
   width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6d9cc; font-size:14px;
   background: #fff;
 }
+.user-info {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+/* Put the two blocks side by side */
+
+.info-block {
+  flex: 1;
+}
+.info-block h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 0 6px 0;
+}
+
+.info-block p {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
 
 /* notes only for delivery handled by JS (ID notes-field) */
 
@@ -100,15 +126,38 @@ body {
 .payment-options { display:flex; gap:12px; flex-direction:column; margin-bottom:12px; }
 .payment-options label { cursor:pointer; }
 
+.datetime-section {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* two columns */
+    gap: 20px;
+}
+
+.datetime-field {
+    display: flex;
+    flex-direction: column; /* label above input inside each field */
+}
+
+.datetime-field label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.datetime-field input {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
 /* card section animation */
-#card-section {
+.card-section, .paynow-box {
     overflow: hidden;
     max-height: 0;
     opacity: 0;
     transition: max-height 0.3s ease, opacity 0.3s ease;
     will-change: max-height;
 }
-#card-section:not(.hidden) { max-height: 0; opacity:0; }
+.hidden { max-height: 0; opacity:0; }
 
 /* two col */
 .two-col { display:flex; gap:12px; }

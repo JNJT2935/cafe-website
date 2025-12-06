@@ -2,8 +2,17 @@
 session_start();
 include "../backend/database/db.php";
 
+
+
 // For now use a static user_id until login system exists
 $user_id = 1;
+
+$not_logged_in = false;
+
+if (!isset($_SESSION['user_id'])) {
+    $not_logged_in = false; //change to true
+}
+
 
 // Fetch cart items
 $sql = "SELECT 
@@ -14,8 +23,8 @@ $sql = "SELECT
             p.description,
             p.price,
             p.source_image
-        FROM cart c
-        INNER JOIN product p ON c.product_id = p.product_id
+        FROM cart c INNER JOIN product p
+        ON c.product_id = p.product_id
         WHERE c.user_id = $user_id";
 
 $result = $conn->query($sql);
@@ -79,6 +88,21 @@ if ($result && $result->num_rows > 0) {
     <!-- Header -->
     <?php include '..\assets\includes\header.php'; ?>
 
+    <!-- login message -->
+    
+    <?php if ($not_logged_in): ?>
+        <div class="login-overlay">
+            <div class="login-modal">
+                <h2>Login Required</h2>
+                <p>You must log in to view your cart and continue shopping.</p>
+
+                <a href="login.php" class="login-btn">Login</a>
+                <a href="register.php" class="register-btn">Create an Account</a>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <!-- main cart contain -->
     <main class="cart-background">
         <div class="cart-container">
             <!-- LEFT SIDE — ITEMS -->
@@ -149,20 +173,20 @@ if ($result && $result->num_rows > 0) {
                     <button class="checkout-btn" onclick="window.location.href='checkout_page.php'">
                         Proceed to Checkout
                     </button>
-                    
-                    <?php if (isset($_SESSION['cart_warning'])): ?>
-                        <div class="toast-warning">
-                            <?php 
-                                echo $_SESSION['cart_warning']; 
-                                unset($_SESSION['cart_warning']);
-                            ?>
-                        </div>
-                    <?php endif; ?>
-
                 </div>
             </section>
         </div>
     </main>
+    <!--empty cart message-->
+    <?php if (isset($_SESSION['cart_warning'])): ?>
+        <div class="toast-warning">
+            <?php 
+                echo $_SESSION['cart_warning']; 
+                unset($_SESSION['cart_warning']);
+            ?>
+        </div>
+    <?php endif; ?>
+
 
     <!-- Footer -->
     <?php include '../assets/includes/cart_footer.php'; ?>
