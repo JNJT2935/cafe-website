@@ -74,7 +74,7 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
                         <td>1</td>
                         <td>John Doe</td>
                         <td>Rs 450</td>
-                        <td>2025-12-01</td>
+                        <td>01-12-2025</td>
                         <td><span class="status pending">Pending</span></td>
                         <td>
                             <form class="status-form" onsubmit="event.preventDefault(); saveStatus(this)">
@@ -92,7 +92,7 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
                         <td>2</td>
                         <td>Emily</td>
                         <td>Rs 780</td>
-                        <td>2025-12-02</td>
+                        <td>02-12-2025</td>
                         <td><span class="status delivered">Delivered</span></td>
                         <td>
                             <form class="status-form" onsubmit="event.preventDefault(); saveStatus(this)">
@@ -132,7 +132,7 @@ const ordersDetails = {
         address: "Rose Hill, Mauritius",
         items: "Cappuccino x2, Latte x1", 
         total: "Rs 450",
-        order_date: "2025-12-01",
+        order_date: "01-12-2025",
         delivery_note: "Leave at door",
         status: "Pending" 
     },
@@ -143,7 +143,7 @@ const ordersDetails = {
         address: "Curepipe",
         items: "Mocha x3, Croissant x2", 
         total: "Rs 780",
-        order_date: "2025-12-02",
+        order_date: "02-12-2025",
         delivery_note: "Call on arrival",
         status: "Delivered" 
     }
@@ -194,3 +194,4 @@ function saveStatus(form) {
 
 </body>
 </html>
+
