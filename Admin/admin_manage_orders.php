@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin - Manage Orders</title>
+
 <style>
 /* ===== RESET & BODY ===== */
 html, body { margin:0; padding:0; font-family: Arial, sans-serif; background-color: #BA9D8A; }
@@ -41,6 +42,7 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) { .order-container { grid-template-columns:1fr; } }
 </style>
+
 </head>
 
 <body>
@@ -59,9 +61,10 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
             <div class="order-table">
                 <table>
                     <tr>
-                        <th>#</th>
+                        <th>Order ID</th>
                         <th>Customer</th>
                         <th>Total</th>
+                        <th>Order Date</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -71,6 +74,7 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
                         <td>1</td>
                         <td>John Doe</td>
                         <td>Rs 450</td>
+                        <td>2025-12-01</td>
                         <td><span class="status pending">Pending</span></td>
                         <td>
                             <form class="status-form" onsubmit="event.preventDefault(); saveStatus(this)">
@@ -88,6 +92,7 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
                         <td>2</td>
                         <td>Emily</td>
                         <td>Rs 780</td>
+                        <td>2025-12-02</td>
                         <td><span class="status delivered">Delivered</span></td>
                         <td>
                             <form class="status-form" onsubmit="event.preventDefault(); saveStatus(this)">
@@ -118,21 +123,45 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
 </div>
 
 <script>
-// ------------- MOCK ORDER DETAILS ----------------
+// ------------- MOCK ORDER DETAILS WITH ALL FIELDS ----------------
 const ordersDetails = {
-    1: { name: "John Doe", phone: "5778-1122", address: "Rose Hill, Mauritius", items: "Cappuccino x2, Latte x1", total: "Rs 450", status: "Pending" },
-    2: { name: "Emily", phone: "5789-2233", address: "Curepipe", items: "Mocha x3, Croissant x2", total: "Rs 780", status: "Delivered" }
+    1: { 
+        name: "John Doe", 
+        phone: "5778-1122", 
+        email: "john@example.com",
+        address: "Rose Hill, Mauritius",
+        items: "Cappuccino x2, Latte x1", 
+        total: "Rs 450",
+        order_date: "2025-12-01",
+        delivery_note: "Leave at door",
+        status: "Pending" 
+    },
+    2: { 
+        name: "Emily",
+        phone: "5789-2233", 
+        email: "emily@example.com",
+        address: "Curepipe",
+        items: "Mocha x3, Croissant x2", 
+        total: "Rs 780",
+        order_date: "2025-12-02",
+        delivery_note: "Call on arrival",
+        status: "Delivered" 
+    }
 };
 
 // SHOW DETAILS ON CLICK
 function showDetails(id) {
     const d = ordersDetails[id];
     document.getElementById("details-box").innerHTML = `
+        <p><strong>Order ID:</strong> ${id}</p>
         <p><strong>Name:</strong> ${d.name}</p>
+        <p><strong>Email:</strong> ${d.email}</p>
         <p><strong>Phone:</strong> ${d.phone}</p>
         <p><strong>Address:</strong> ${d.address}</p>
-        <p><strong>Items:</strong> ${d.items}</p>
-        <p><strong>Total:</strong> ${d.total}</p>
+        <p><strong>Items Ordered:</strong> ${d.items}</p>
+        <p><strong>Total Amount:</strong> ${d.total}</p>
+        <p><strong>Order Date:</strong> ${d.order_date}</p>
+        <p><strong>Delivery Note:</strong> ${d.delivery_note}</p>
         <p><strong>Status:</strong> ${d.status}</p>
     `;
 }
@@ -143,18 +172,18 @@ function saveStatus(form) {
     const row = form.closest('tr');
     const statusSpan = row.querySelector('.status');
 
-    // Update the table row
+    // Update table
     statusSpan.textContent = select.value;
     statusSpan.className = "status " + select.value.toLowerCase();
 
-    // Get order ID
+    // Get ID
     const orderId = row.querySelector('td').textContent;
 
-    // Update ordersDetails object
+    // Update stored data
     if (ordersDetails[orderId]) {
         ordersDetails[orderId].status = select.value;
 
-        // If this order is currently showing in details panel, update it
+        // Update details if visible
         const detailsBox = document.getElementById("details-box");
         if (detailsBox.innerHTML.includes(ordersDetails[orderId].name)) {
             showDetails(orderId);
