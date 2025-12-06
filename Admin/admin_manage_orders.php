@@ -73,7 +73,7 @@ h2 { text-align:center; margin-bottom: 10px; color:#3e2e1f; }
                     <tr onclick="showDetails(1)">
                         <td>1</td>
                         <td>John Doe</td>
-                        <td>Rs 450</td>
+                        <td>Rs 505</td>
                         <td>01-12-2025</td>
                         <td><span class="status pending">Pending</span></td>
                         <td>
@@ -130,8 +130,8 @@ const ordersDetails = {
         phone: "5778-1122", 
         email: "john@example.com",
         address: "Rose Hill, Mauritius",
-        items: "Cappuccino x2, Latte x1", 
-        total: "Rs 450",
+        items: "Cappuccino x2, Coffee Latte x1", 
+        total: "Rs 505",
         order_date: "01-12-2025",
         delivery_note: "Leave at door",
         status: "Pending" 
@@ -194,4 +194,5 @@ function saveStatus(form) {
 
 </body>
 </html>
+
 
