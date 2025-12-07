@@ -16,15 +16,16 @@
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
+                <p>Follow Us Here</p>
             </div>
         </div>
 
         <div class="footer-contact">
             <h4>Contact Details</h4>
             <p><span>Address:</span> Reduit Moka, University of Mauritius, Phase 2 Building</p>
-            <p><span>Phone number:</span> +230 5205 2026</p>
+            <p><span>Phone number:</span> +230 430 2026</p>
             <p><span>Email Address:</span> coffeeshop@gmail.com</p>
-            <p><span>Website:</span> www.coffeeshop.com</p>
+            <p><i class="fa-brands fa-whatsapp"></i> <span>Whatsapp:</span> +230 5205 2026</p>
         </div>
 
         <div class="footer-right">
