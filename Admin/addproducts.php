@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <header class="main-header">
-    <link rel="stylesheet" href="\assets\css\header.css">
+    <link rel="stylesheet" href="..\assets\css\header.css">
     
     <div class="header-left">
         <!-- LOGO -->
-        <a href="pages/Home_Page.php" class="logo">
+        <a href="../pages/Home_Page.php" class="logo">
             <img src="..\assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
             <span>Coffee Shop</span>
         </a>
     </div>
-
+</header>
     <!-- Prototype code for testing -->
 <?php
-//temporary database implementation
-include('./Database/database.php');
+
+include('../backend/database/database.php');
 
 //image upload
 if (isset($_POST['submit'])) {
   $filename = $_FILES["file"]["name"];
   $tempname = $_FILES["file"]["tmp_name"];
-  $folder = "../images/productimages" . $filename;
+  $folder = "../assets/images/productimages/" . $filename;
 
   if ($_FILES["file"]["error"] !== UPLOAD_ERR_OK) {
     if ($_FILES["file"]["error"] == 4) {
@@ -36,22 +36,29 @@ if (isset($_POST['submit'])) {
   }
 
   //Sanitize form input
-  $category = filter_var($_POST["categories"], FILTER_SANITIZE_SPECIAL_CHARS);
-  if ($category !== "Hot Drinks") or ($category !=="Cold Drinks") or ($category !=="Dessert") or ($category !=="Pastries"){
+  $category = filter_var($_POST["categories"], FILTER_SANITIZE_NUMBER_INT);
+  if ($category == 1){
+    $categorytext = "Hot Drinks";
+  } elseif ($category == 2){
+    $categorytext == "Cold Drinks";
+  } elseif ($category == 3){
+    $categorytext == "Dessert";
+  } elseif ($category == 4){
+    $categorytext == "Pastries";
+  }  else{
     die("Category not selected/invalid");
   }
   $product_name = filter_var($_POST["pName"], FILTER_SANITIZE_SPECIAL_CHARS);
-  $sale_price = filter_var($_POST["pPrice"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+  $price = filter_var($_POST["pPrice"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
   $stock = filter_var($_POST["stock"], FILTER_SANITIZE_NUMBER_INT);
   $id = filter_var($_POST["Product_id"], FILTER_SANITIZE_NUMBER_INT);
   $desc = filter_var($_POST["pDescription"], FILTER_SANITIZE_SPECIAL_CHARS);
 
-  $query = "INSERT INTO products (Product_id, pName, Visible_on_website, category, productImage, pDescription, stock_quantity) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  $query = "INSERT INTO product (Product_id, name, category, image_source, description, stock_quantity, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
   $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "isdddsiii", $id, $product_name, FALSE, $category, $filename, $desc , $stock);
-
+  mysqli_stmt_bind_param($stmt, "issssid", $id, $product_name, $category, $filename, $desc , $stock, $price);
   if (mysqli_stmt_execute($stmt)) {
-    header("Location: listing.php");
+    header("Location: ../pages/Home_Page.php");
   } else {
     echo "Error occurred while inserting data.";
   }
@@ -62,8 +69,8 @@ if (isset($_POST['submit'])) {
 <html>
 
 <head>
-  <title>products</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Add products</title>
+  <link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
@@ -71,10 +78,10 @@ if (isset($_POST['submit'])) {
     <div class="box" style="width:360px;height:500px;border:.5px;margin: 0 auto;">
 
       &nbsp;<br>*Product Number<br>&nbsp;
-      <input name="Product_id" class="input" size="36" style="height:35px" type="text" maxlength="40" required placeholder="0">
+      <input name="Product_id" class="input" size="36" style="height:35px" type="text" maxlength="11" required placeholder="0">
 
       &nbsp;<br>*Product Name<br>&nbsp;
-      <input name="pName" class="input" size="36" style="height:35px" type="text" maxlength="40" required>
+      <input name="pName" class="input" size="36" style="height:35px" type="text" required>
 
       <br><br>&nbsp;Purchase Price<br>&nbsp;
       <input name="pPrice" class="input" size="36" style="height:35px" min="0" type="float" placeholder="0.00">
@@ -91,10 +98,10 @@ if (isset($_POST['submit'])) {
       <br><br>&nbsp;Category<br>&nbsp;
       <select name="categories" id="categories" style="width:254px;background-color:#f1f6fa;border-radius:10px;color:#303841;" required>
         <option value="">Select a category</option>
-        <option value="Hot Drinks">Hot Drinks</option>
-        <option value="Cold Drinks">Cold Drinks</option>
-        <option value="Dessert">Dessert</option>
-        <option value="Pastries">Pastries</option>
+        <option value=1>Hot Drinks</option>
+        <option value=2>Cold Drinks</option>
+        <option value=3>Dessert</option>
+        <option value=4>Pastries</option>
       </select>
 
       <br><br>&nbsp;&nbsp;&nbsp;
