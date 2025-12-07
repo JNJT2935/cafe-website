@@ -95,6 +95,23 @@ body {
     font-weight: bold;
 }
 
+.cart-quantity-error {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    background: #fff3cd;
+    color: #856404;
+    border-right: 4px solid #ffc107;
+    padding: 15px 22px;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    animation: slideleft 1s ease;
+    z-index: 9999;
+    max-width: 400px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .delete-item {
     background: none;
     border: none;
@@ -164,7 +181,11 @@ body {
     background: #6F4E37;
     transition: 0.2s;
 }
-
+.checkout-btn.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+}
 /* animation styling */
 #card-section {
     overflow: hidden;

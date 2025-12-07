@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "db.php";
+include "../database/db.php";
 
 $cart_id = $_POST['cart_id'];
 $action = $_POST['action'];  // plus, minus, delete

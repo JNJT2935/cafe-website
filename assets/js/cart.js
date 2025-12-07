@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateCart(cartId, action) {
-    fetch("../backend/database/update_cart.php", {
+    fetch("../backend/checkout/update_cart.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `cart_id=${cartId}&action=${action}`

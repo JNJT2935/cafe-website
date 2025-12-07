@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "../backend/database/db.php";
-
+// static untill logging page is complete
 $user_id = 1;
 
 // Check if cart is empty before giving access
@@ -23,9 +23,8 @@ $sql = "SELECT
             p.product_id,
             p.name AS product_name,
             p.price,
-            p.source_image,
             u.name AS user_name,
-            u.phoneNo
+            u.phone_number
         FROM cart c
         INNER JOIN product p ON c.product_id = p.product_id
         INNER JOIN user u ON c.user_id = u.user_id
@@ -50,7 +49,7 @@ if ($result && $result->num_rows > 0) {
         //name
         $user_name = $row['user_name'];
         //phone number
-        $user_phone_number = $row['phoneNo'];
+        $user_phone_number = $row['phone_number'];
     }
 }
 
@@ -59,14 +58,20 @@ if ($result && $result->num_rows > 0) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== META TAGS ===== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta name="author" content="Noah Trousquin">
+    <meta name="description" content="checkout page">
     <title>Checkout</title>
 
     <!-- Global + Checkout CSS -->
-    <link rel="stylesheet" href="..\assets\css\checkout_page.css">
+    <link rel="stylesheet" href="..\assets\css\checkout\checkout_page.css">
     <link rel="stylesheet" href="..\assets\css\header.css">
-    <link rel="stylesheet" href="..\assets\css\cart_footer.css">
+    <link rel="stylesheet" href="..\assets\css\cart\cart_footer.css">
 </head>
 
 <body>
@@ -76,11 +81,29 @@ if ($result && $result->num_rows > 0) {
 
     <main class="page-wrapper">
 
+        <?php
+        if (isset($_SESSION['order_error'])) {
+            echo '<div style="
+                background:#ffdddd;
+                padding:15px;
+                margin:20px 0;
+                border-left:5px solid #d8000c;
+                color:#a70000;
+                font-size:16px;
+                border-radius:5px;
+            ">' . htmlspecialchars($_SESSION['order_error']) . '</div>';
+
+            // clear it so it does not persist
+            unset($_SESSION['order_error']);
+        }
+        ?>
+
+
         <div class="back-link">
             <a href="../pages/cart_page.php">← Back to Cart</a>
         </div>
 
-        <form class="checkout-container" id="checkout-form" action="process_order.php" method="POST" novalidate>
+        <form class="checkout-container" id="checkout-form" action="..\backend\checkout\process_order.php" method="POST">
             <!-- LEFT: Order Summary -->
             <section class="checkout-left">
 
@@ -124,8 +147,6 @@ if ($result && $result->num_rows > 0) {
                     </div>
                 </div>
 
-
-
                 <!-- PICKUP FIELDS (hidden by default) -->
                 <div class="slide-panel hidden" id="pickup-panel" aria-hidden="true">
                     <div class="input-field">
@@ -140,15 +161,15 @@ if ($result && $result->num_rows > 0) {
                         </select>
                         <!-- Keep phone & name for pickup as well -->
                         <div class="user-info">
-                        <div class="info-block">
-                            <H3>Full Name</H3>
-                            <p><?php echo $user_name; ?></p>
+                            <div class="info-block">
+                                <H3>Full Name</H3>
+                                <p><?php echo $user_name; ?></p>
+                            </div>
+                            <div class="info-block">
+                                <H3>Phone Number</H3>
+                                <p><?php echo $user_phone_number; ?></p>
+                            </div>
                         </div>
-                        <div class="info-block">
-                            <H3>Phone Number</H3>
-                            <p><?php echo $user_phone_number; ?></p>
-                        </div>
-                    </div>
                     </div>
                 </div>
                 <hr>
@@ -157,7 +178,7 @@ if ($result && $result->num_rows > 0) {
                 <div class="payment-options">
                     <label><input type="radio" name="payment" value="cash" checked> Cash on Delivery</label>
                     <label><input type="radio" name="payment" value="card"> Debit / Credit Card</label>
-                    <label><input type="radio" name="payment" value="paynow"> Scan to pay (Juice/My.t Money/Paypal)</label>
+                    <label><input type="radio" name="payment" value="scan"> Scan to pay (Juice/My.t Money/Paypal)</label>
                 </div>
                 <!-- card details expandable (hidden by default) -->
                 <div id="card-section" class="card-section hidden" aria-hidden="true">
@@ -208,7 +229,7 @@ if ($result && $result->num_rows > 0) {
 
                 <div class="order-item">
                     <p>Delivery Fee </p>
-                    <p>Rs <span id="delivery-fee">0</span></p>
+                    <p>Rs <span id="delivery-fee"></span></p>
                 </div>
 
                 <div class="total-box">

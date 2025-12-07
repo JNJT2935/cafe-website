@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const checkoutForm = document.getElementById("checkout-form");
 
-  // Hidden input to send fee to server (created automatically if not present)
+  // Hidden input to send fee to server (created automatically)
   let deliveryFeeInput = document.getElementById("delivery_fee_input");
   if (!deliveryFeeInput && checkoutForm) {
     deliveryFeeInput = document.createElement("input");
@@ -140,11 +140,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ---------------------------
-  - opens card panel when value === 'card'
-  - opens paynow panel when value === 'paynow'
-  - closes both otherwise
-  - uses aria-hidden + hidden class + maxHeight transition
-  --------------------------- */
+   - opens card panel when value === 'card'
+   - opens paynow panel when value === 'paynow'
+   - closes both otherwise
+   - uses aria-hidden + hidden class + maxHeight transition
+   --------------------------- */
   function initPaymentHandlers() {
   // helper to open a generic panel (cardSection / payNowBox)
   function openPanelGeneric(panel) {
@@ -174,18 +174,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // when a payment radio changes, decide which panels to open/close
   paymentRadios.forEach(radio => {
     radio.addEventListener("change", (e) => {
-      const SelectedPaymentRadio = e.target.value;
+      const v = e.target.value;
 
-      if (SelectedPaymentRadio === "card") {
+      if (v === "card") {
         // show card, hide paynow
         openPanelGeneric(cardSection);
         closePanelGeneric(payNowBox);
-      } else if (SelectedPaymentRadio === "paynow") {
+      } else if (v === "scan") {
         // show paynow, hide card
         openPanelGeneric(payNowBox);
         closePanelGeneric(cardSection);
       } else {
-        // any other payment method (cash) -> hide both
+        // any other payment method (cash/cod) -> hide both
         closePanelGeneric(cardSection);
         closePanelGeneric(payNowBox);
       }
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // INITIALIZE state on load based on currently checked payment radio
-  const checkedPayment = document.querySelector("input[name='payment']:checked");
+  const checkedPayment = document.querySelector("input[name='payment']:checked, input[name='payment_method']:checked");
   if (checkedPayment) {
     if (checkedPayment.value === "card") {
       // show card, hide paynow

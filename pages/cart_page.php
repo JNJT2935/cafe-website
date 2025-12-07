@@ -10,7 +10,7 @@ $user_id = 1;
 $not_logged_in = false;
 
 if (!isset($_SESSION['user_id'])) {
-    $not_logged_in = false; //change to true
+    $not_logged_in = false; //change to true later
 }
 
 
@@ -22,7 +22,8 @@ $sql = "SELECT
             p.name,
             p.description,
             p.price,
-            p.source_image
+            p.image_source,
+            p.stock_quantity
         FROM cart c INNER JOIN product p
         ON c.product_id = p.product_id
         WHERE c.user_id = $user_id";
@@ -30,6 +31,7 @@ $sql = "SELECT
 $result = $conn->query($sql);
 
 $cart_items = [];
+$out_of_stock = [];
 $cart_total = 0;
 $total_quantity = 0;
 $item_count = 0;
@@ -53,6 +55,12 @@ if ($result && $result->num_rows > 0) {
     foreach ($cart_items as $item) {
         $total_quantity += $item['quantity'];
     }
+    //checking if quantity_cart > quantity_stock 
+    foreach ($cart_items as $item) {
+    if ($item['quantity'] > $item['stock_quantity']) {
+        $out_of_stock[] = $item;
+    }
+}
 }
 ?>
 
@@ -63,25 +71,24 @@ if ($result && $result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Social Media Preview (Optional but professional) -->
-    <meta property="og:title" content="Coffee Shop Cart">
-    <meta property="og:description" content="Review your items before checkout.">
-    <meta property="og:image" content="/assets/images/preview.jpg">
-    <meta property="og:type" content="website">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta name="author" content="Noah Trousquin">
+    <meta name="description" content="checkout page">
 
     <!-- Title -->
     <title>Coffee Shop | Cart</title>
  
     <!-- CSS FILES -->
     <link rel="stylesheet" href="..\assets\css\header.css">
-    <link rel="stylesheet" href="..\assets\css\cart.css">
+    <link rel="stylesheet" href="..\assets\css\cart\cart.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="..\assets\css\cart_footer.css">
+    <link rel="stylesheet" href="..\assets\css\cart\cart_footer.css">
 </head>
 
 <!-- JS -->
-    <script src="../assets/js/cart.js"></script>
+    <script src="..\assets\js\cart.js"></script>
 
 <body>
 
@@ -101,6 +108,23 @@ if ($result && $result->num_rows > 0) {
             </div>
         </div>
     <?php endif; ?>
+    <!-- out of stock message -->
+    <?php if (!empty($out_of_stock)): ?>
+    <div class="cart-quantity-error">
+        <strong>Some items exceed available stock:</strong>
+        <ul>
+            <?php foreach ($out_of_stock as $item): ?>
+                <li>
+                    <?= htmlspecialchars($item['name']) ?>:
+                    requested <?= $item['quantity'] ?>,
+                    available <?= $item['stock_quantity'] ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <p>Please reduce the quantity or remove the items before checking out.</p>
+    </div>
+    <?php endif; ?>
+
 
     <!-- main cart contain -->
     <main class="cart-background">
@@ -117,7 +141,7 @@ if ($result && $result->num_rows > 0) {
 
                         <?php foreach ($cart_items as $item): ?>
                             <div class="cart-item-card" >
-                                <img src="<?php echo $item['source_image']; ?>" alt="item image">
+                                <img src="../assets/images/productimages/<?php echo $item['image_source']; ?>" alt="item image">
 
                                     <div class="cart-item-info">
                                         <h3><?php echo $item['name']; ?></h3>
@@ -170,9 +194,11 @@ if ($result && $result->num_rows > 0) {
                         <span> Rs <?php echo number_format($cart_total, 2); ?></span>
                     </div>
 
-                    <button class="checkout-btn" onclick="window.location.href='checkout_page.php'">
-                        Proceed to Checkout
-                    </button>
+                    <?php if (empty($out_of_stock)): ?>
+                        <button class="checkout-btn" onclick="window.location.href='checkout_page.php'">Proceed to Checkout</button>
+                    <?php else: ?>
+                        <button class="checkout-btn disabled" disabled>Fix Stock Issues First</button>
+                    <?php endif; ?>
                 </div>
             </section>
         </div>

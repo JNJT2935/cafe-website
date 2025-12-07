@@ -52,8 +52,6 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 }
-
-
 /* order items */
 .order-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom: 1px solid #f0eae0; }
 .delivery_fee { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom: 1px solid #f0eae0; }

@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$dbname = "coffee_shop_test"; // change to your db name
+$dbname = "coffee_shop"; // change to your db name
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 
