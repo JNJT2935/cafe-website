@@ -1,6 +1,6 @@
 .coffee-footer {
-    background-color: #B3826C;
-    color: #3e2e1f;
+    background-color: #a97061;
+    color: #24202b;
     padding: 10px 40px 22px;
     position: relative;
 }
@@ -39,7 +39,7 @@
 .logo-text {
     font-size: 20px;
     font-weight: 600;
-    color: #3e2e1f;                     
+    color: #24202b;                     
     margin: 0;
 }
 

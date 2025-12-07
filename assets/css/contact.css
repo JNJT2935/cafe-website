@@ -1,5 +1,5 @@
 .contact-page {
-    background-color: #BA9D8A; 
+    background-color: #6c473d; 
     padding: 60px 20px;
     display: flex;
     justify-content: center;
@@ -14,7 +14,7 @@
 
 .contact-left {
     flex: 1;
-    color: #3D240C;   
+    color: #fff0df;   
     display: flex;
     flex-direction: column;
     justify-content: center;
