@@ -1,7 +1,7 @@
 <?php
 include('../backend/database/database.php');
 
-if (isset($_POST['update'])) {
+if (isset($_POST['submit'])) {
   $product_name = filter_var($_POST["pName"], FILTER_SANITIZE_SPECIAL_CHARS);
   $price = filter_var($_POST["pPrice"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
   $stock = filter_var($_POST["stock"], FILTER_SANITIZE_NUMBER_INT);
@@ -67,7 +67,7 @@ if (isset($_POST['update'])) {
   }
 
 
-  $query = "UPDATE product SET name = ? category = ? description = ? stock_quantity = ? price = ? Visible_on_website = ? WHERE Product_id = ?";
+  $query = "UPDATE product SET name = ?, category = ?, description = ?, stock_quantity = ?, price = ?, Visible_on_website = ? WHERE Product_id = ?;";
   $stmt = mysqli_prepare($conn, $query);
   mysqli_stmt_bind_param($stmt, "sssidii", $product_name, $category, $desc , $stock, $price, $visible, $id);
   if (mysqli_stmt_execute($stmt)) {
