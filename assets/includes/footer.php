@@ -22,7 +22,7 @@
         <div class="footer-contact">
             <h4>Contact Details</h4>
             <p><span>Address:</span> Reduit Moka, University of Mauritius, Phase 2 Building</p>
-            <p><span>Phone number:</span> +1 202-918-2132</p>
+            <p><span>Phone number:</span> +230 5205 2026</p>
             <p><span>Email Address:</span> coffeeshop@gmail.com</p>
             <p><span>Website:</span> www.coffeeshop.com</p>
         </div>
@@ -31,4 +31,5 @@
             <p>© 2025 Coffee Shop. All Rights Reserved.</p>
         </div>
     </div>
+
 </footer>
