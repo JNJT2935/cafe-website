@@ -2,8 +2,6 @@
 session_start();
 include "../backend/database/db.php";
 
-
-
 // For now use a static user_id until login system exists
 $user_id = 1;
 
@@ -103,7 +101,7 @@ if ($result && $result->num_rows > 0) {
                 <h2>Login Required</h2>
                 <p>You must log in to view your cart and continue shopping.</p>
 
-                <a href="login.php" class="login-btn">Login</a>
+                <a href="logging.php" class="login-btn">Login</a>
                 <a href="register.php" class="register-btn">Create an Account</a>
             </div>
         </div>

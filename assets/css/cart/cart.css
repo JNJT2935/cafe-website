@@ -11,7 +11,7 @@ body {
 }
 
 .cart-background {
-    background-image: url("../images/cart_page/shopping-cart-icon.svg");
+    background-image: url("../../images/cart_page/shopping-cart-icon.svg");
     background-size: 300px 240px ;
     background-position: center;
     background-repeat:repeat;

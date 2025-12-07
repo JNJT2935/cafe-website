@@ -6,7 +6,7 @@ body {
 /* small wrapper & back link */
 .page-wrapper { 
     padding: 50px 10px 60px;
-    background-image: url("../images/cart_page/shopping-cart-icon.svg");
+    background-image: url("../../images/cart_page/shopping-cart-icon.svg");
     background-size: 300px 240px ;
     background-position: center, fixed;
     background-repeat:repeat;

@@ -113,7 +113,7 @@ $order_item->close();
             </div>
         </div>
 
-        <a href="../../pages/cart_pages" class="back-link">Back to Shop</a>
+        <a href="../../pages/cart_page.php" class="back-link">Back to Shop</a>
     </div>
 </main>
 
