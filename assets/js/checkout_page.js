@@ -1,281 +1,184 @@
-// checkout_page_integrated.js
-document.addEventListener("DOMContentLoaded", () => {
-
-  //Panel helpers (slide open/close)
+$(document).ready(function () {
+  // Panel helpers
   function openPanel(panel) {
     if (!panel) return;
-    panel.classList.remove("hidden");
-    panel.setAttribute("aria-hidden", "false");
-    const scrollH = panel.scrollHeight;
-    panel.style.maxHeight = scrollH + "px";
-    panel.style.opacity = "1";
-    Array.from(panel.querySelectorAll("input, textarea, select")).forEach(el => el.disabled = false);
+    $(panel)
+      .removeClass("hidden")
+      .attr("aria-hidden", "false")
+      .css({ maxHeight: panel.scrollHeight + "px", opacity: "1" })
+      .find("input, textarea, select")
+      .prop("disabled", false);
   }
 
   function closePanel(panel) {
     if (!panel) return;
-    panel.style.maxHeight = "0px";
-    panel.style.opacity = "0";
-    panel.setAttribute("aria-hidden", "true");
-
-    const disableAfter = () => {
-      Array.from(panel.querySelectorAll("input, textarea, select")).forEach(el => el.disabled = true);
-      panel.classList.add("hidden");
-      panel.removeEventListener("transitionend", disableAfter);
-    };
-    panel.addEventListener("transitionend", disableAfter);
+    $(panel)
+      .css({ maxHeight: "0px", opacity: "0" })
+      .attr("aria-hidden", "true");
+    $(panel).one("transitionend", function () {
+      $(panel).find("input, textarea, select").prop("disabled", true);
+      $(panel).addClass("hidden");
+    });
   }
 
+  // Elements
+  const $fulfillmentRadios = $("input[name='fulfillment']");
+  const $deliveryPanel = $("#delivery-panel");
+  const $pickupPanel = $("#pickup-panel");
+  const $addressInput = $("#address");
 
-  //Elements
+  const $paymentRadios = $("input[name='payment']");
+  const $cardSection = $("#card-section");
+  const $payNowBox = $("#paynow_details");
 
-  const fulfillmentRadios = Array.from(document.querySelectorAll("input[name='fulfillment']"));
-  const deliveryPanel = document.getElementById("delivery-panel");
-  const pickupPanel = document.getElementById("pickup-panel");
-  const addressInput = document.getElementById("address");
+  const $deliveryFeeElement = $("#delivery-fee");
+  const $finalTotalElement = $("#final-total");
+  const $checkoutForm = $("#checkout-form");
 
-  const paymentRadios = Array.from(document.querySelectorAll("input[name='payment']"));
-  const cardSection = document.getElementById("card-section");
-
-  const payNowBox = document.getElementById("paynow_details");
-
-  const deliveryFeeElement = document.getElementById("delivery-fee");
-  const finalTotalElement = document.getElementById("final-total");
-
-  const checkoutForm = document.getElementById("checkout-form");
-
-  // Hidden input to send fee to server (created automatically)
-  let deliveryFeeInput = document.getElementById("delivery_fee_input");
-  if (!deliveryFeeInput && checkoutForm) {
-    deliveryFeeInput = document.createElement("input");
-    deliveryFeeInput.type = "hidden";
-    deliveryFeeInput.id = "delivery_fee_input";
-    deliveryFeeInput.name = "delivery_fee";
-    deliveryFeeInput.value = "0";
-    checkoutForm.appendChild(deliveryFeeInput);
+  // Hidden input
+  let $deliveryFeeInput = $("#delivery_fee_input");
+  if ($deliveryFeeInput.length === 0 && $checkoutForm.length) {
+    $deliveryFeeInput = $("<input>", {
+      type: "hidden",
+      id: "delivery_fee_input",
+      name: "delivery_fee",
+      value: "0",
+    }).appendTo($checkoutForm);
   }
-  //constants
+
   const DELIVERY_FEE = 150;
-  const baseTotal = (finalTotalElement && finalTotalElement.dataset && finalTotalElement.dataset.baseTotal)
-  ? parseFloat(finalTotalElement.dataset.baseTotal) || 0
-  : (finalTotalElement ? parseFloat(finalTotalElement.textContent.replace(/[^\d\.\-]/g,'')) || 0 : 0);
-  
-  /* ---------------------------
-     Initialize panels (Delivery default unless 'pickup' checked)
-     --------------------------- */
+  const baseTotal = $finalTotalElement.data("baseTotal")
+    ? parseFloat($finalTotalElement.data("baseTotal")) || 0
+    : parseFloat($finalTotalElement.text().replace(/[^\d\.\-]/g, "")) || 0;
+
+  // Initialize panels
   function initPanels() {
-    const checked = document.querySelector("input[name='fulfillment']:checked");
-    if (checked && checked.value === "pickup") {
-      // pickup shown, delivery hidden
-      if (deliveryPanel) {
-        deliveryPanel.classList.add("hidden");
-        deliveryPanel.setAttribute("aria-hidden", "true");
-        Array.from(deliveryPanel.querySelectorAll("input, textarea, select")).forEach(el => el.disabled = true);
-        deliveryPanel.style.maxHeight = "0px";
-        deliveryPanel.style.opacity = "0";
-      }
-      if (pickupPanel) {
-        pickupPanel.classList.remove("hidden");
-        pickupPanel.setAttribute("aria-hidden", "false");
-        Array.from(pickupPanel.querySelectorAll("input, textarea, select")).forEach(el => el.disabled = false);
-        pickupPanel.style.maxHeight = pickupPanel.scrollHeight + "px";
-        pickupPanel.style.opacity = "1";
-      }
+    const checked = $("input[name='fulfillment']:checked").val();
+    if (checked === "pickup") {
+      closePanel($deliveryPanel[0]);
+      openPanel($pickupPanel[0]);
       setDeliveryFee(0);
     } else {
-      // delivery shown
-      if (pickupPanel) {
-        pickupPanel.classList.add("hidden");
-        pickupPanel.setAttribute("aria-hidden", "true");
-        Array.from(pickupPanel.querySelectorAll("input, textarea, select")).forEach(el => el.disabled = true);
-        pickupPanel.style.maxHeight = "0px";
-        pickupPanel.style.opacity = "0";
-      }
-      if (deliveryPanel) {
-        deliveryPanel.classList.remove("hidden");
-        deliveryPanel.setAttribute("aria-hidden", "false");
-        Array.from(deliveryPanel.querySelectorAll("input, textarea, select")).forEach(el => el.disabled = false);
-        deliveryPanel.style.maxHeight = deliveryPanel.scrollHeight + "px";
-        deliveryPanel.style.opacity = "1";
-      }
+      closePanel($pickupPanel[0]);
+      openPanel($deliveryPanel[0]);
       setDeliveryFee(DELIVERY_FEE);
     }
   }
-
   initPanels();
 
-  //Fulfillment change handler (delivery <-> pickup)
-  fulfillmentRadios.forEach(radio => {
-    radio.addEventListener("change", (e) => {
-      if (e.target.value === "pickup") {
-        // save address if present
-        if (addressInput) addressInput.dataset.savedValue = addressInput.value || "";
-
-        closePanel(deliveryPanel);
-        openPanel(pickupPanel);
-        setDeliveryFee(0);
-      } else {
-        // restore address value if saved
-        if (addressInput && addressInput.dataset.savedValue !== undefined) {
-          addressInput.value = addressInput.dataset.savedValue;
-        }
-        closePanel(pickupPanel);
-        openPanel(deliveryPanel);
-        setDeliveryFee(DELIVERY_FEE);
-      }
-    });
-  });
-  /* ---------------------------
-     Delivery fee: update display + hidden input
-     returns 0 or 150 for PHP
-     --------------------------- */
-  function setDeliveryFee(value) {
-    if (deliveryFeeElement) deliveryFeeElement.textContent = value;
-    if (finalTotalElement) {
-      const newTotal = (isNaN(baseTotal) ? 0 : baseTotal) + (isNaN(parseFloat(value)) ? 0 : parseFloat(value));
-      // show as integer if original is integer
-      finalTotalElement.textContent = Number.isInteger(newTotal) ? newTotal : newTotal.toFixed(2);
-    }
-    if (deliveryFeeInput) deliveryFeeInput.value = value;
-  }
-
-  /* ---------------------------
-   - opens card panel when value === 'card'
-   - opens paynow panel when value === 'paynow'
-   - closes both otherwise
-   - uses aria-hidden + hidden class + maxHeight transition
-   --------------------------- */
-  function initPaymentHandlers() {
-  // helper to open a generic panel (cardSection / payNowBox)
-  function openPanelGeneric(panel) {
-    if (!panel) return;
-    panel.classList.remove("hidden");
-    panel.setAttribute("aria-hidden", "false");
-    // animate by setting maxHeight to scrollHeight
-    panel.style.maxHeight = panel.scrollHeight + "px";
-    panel.style.opacity = "1";
-    Array.from(panel.querySelectorAll("input, textarea, select")).forEach(i => i.disabled = false);
-  }
-
-  // helper to close a generic panel
-  function closePanelGeneric(panel) {
-    if (!panel) return;
-    panel.style.maxHeight = "0px";
-    panel.style.opacity = "0";
-    panel.setAttribute("aria-hidden", "true");
-    const after = () => {
-      Array.from(panel.querySelectorAll("input, textarea, select")).forEach(i => i.disabled = true);
-      panel.classList.add("hidden");
-      panel.removeEventListener("transitionend", after);
-    };
-    panel.addEventListener("transitionend", after);
-  }
-
-  // when a payment radio changes, decide which panels to open/close
-  paymentRadios.forEach(radio => {
-    radio.addEventListener("change", (e) => {
-      const v = e.target.value;
-
-      if (v === "card") {
-        // show card, hide paynow
-        openPanelGeneric(cardSection);
-        closePanelGeneric(payNowBox);
-      } else if (v === "scan") {
-        // show paynow, hide card
-        openPanelGeneric(payNowBox);
-        closePanelGeneric(cardSection);
-      } else {
-        // any other payment method (cash/cod) -> hide both
-        closePanelGeneric(cardSection);
-        closePanelGeneric(payNowBox);
-      }
-    });
-  });
-
-  // INITIALIZE state on load based on currently checked payment radio
-  const checkedPayment = document.querySelector("input[name='payment']:checked, input[name='payment_method']:checked");
-  if (checkedPayment) {
-    if (checkedPayment.value === "card") {
-      // show card, hide paynow
-      if (cardSection) {
-        cardSection.classList.remove("hidden");
-        cardSection.setAttribute("aria-hidden", "false");
-        cardSection.style.maxHeight = cardSection.scrollHeight + "px";
-        cardSection.style.opacity = "1";
-        Array.from(cardSection.querySelectorAll("input")).forEach(i => i.disabled = false);
-      }
-      if (payNowBox) closePanelGeneric(payNowBox);
-    } else if (checkedPayment.value === "paynow") {
-      // show paynow, hide card
-      if (payNowBox) {
-        payNowBox.classList.remove("hidden");
-        payNowBox.setAttribute("aria-hidden", "false");
-        payNowBox.style.maxHeight = payNowBox.scrollHeight + "px";
-        payNowBox.style.opacity = "1";
-        Array.from(payNowBox.querySelectorAll("input, textarea, select")).forEach(i => i.disabled = false);
-      }
-      if (cardSection) closePanelGeneric(cardSection);
+  // Fulfillment change
+  $fulfillmentRadios.on("change", function () {
+    if (this.value === "pickup") {
+      if ($addressInput.length)
+        $addressInput.data("savedValue", $addressInput.val() || "");
+      closePanel($deliveryPanel[0]);
+      openPanel($pickupPanel[0]);
+      setDeliveryFee(0);
     } else {
-      // none selected or cash
-      if (cardSection) closePanelGeneric(cardSection);
-      if (payNowBox) closePanelGeneric(payNowBox);
+      if (
+        $addressInput.length &&
+        $addressInput.data("savedValue") !== undefined
+      ) {
+        $addressInput.val($addressInput.data("savedValue"));
+      }
+      closePanel($pickupPanel[0]);
+      openPanel($deliveryPanel[0]);
+      setDeliveryFee(DELIVERY_FEE);
     }
-  } else {
-    // fallback: hide both
-    if (cardSection) closePanelGeneric(cardSection);
-    if (payNowBox) closePanelGeneric(payNowBox);
+  });
+
+  // Delivery fee
+  function setDeliveryFee(value) {
+    $deliveryFeeElement.text(value);
+    const newTotal = baseTotal + parseFloat(value) || 0;
+    $finalTotalElement.text(
+      Number.isInteger(newTotal) ? newTotal : newTotal.toFixed(2),
+    );
+    $deliveryFeeInput.val(value);
   }
+
+  // Payment handlers
+  function initPaymentHandlers() {
+    function openPanelGeneric(panel) {
+      if (!panel) return;
+      $(panel)
+        .removeClass("hidden")
+        .attr("aria-hidden", "false")
+        .css({ maxHeight: panel.scrollHeight + "px", opacity: "1" })
+        .find("input, textarea, select")
+        .prop("disabled", false);
+    }
+    function closePanelGeneric(panel) {
+      if (!panel) return;
+      $(panel)
+        .css({ maxHeight: "0px", opacity: "0" })
+        .attr("aria-hidden", "true")
+        .one("transitionend", function () {
+          $(panel).find("input, textarea, select").prop("disabled", true);
+          $(panel).addClass("hidden");
+        });
+    }
+
+    $paymentRadios.on("change", function () {
+      const v = this.value;
+      if (v === "card") {
+        openPanelGeneric($cardSection[0]);
+        closePanelGeneric($payNowBox[0]);
+      } else if (v === "scan") {
+        openPanelGeneric($payNowBox[0]);
+        closePanelGeneric($cardSection[0]);
+      } else {
+        closePanelGeneric($cardSection[0]);
+        closePanelGeneric($payNowBox[0]);
+      }
+    });
+
+    const checkedPayment = $(
+      "input[name='payment']:checked, input[name='payment_method']:checked",
+    ).val();
+    if (checkedPayment === "card") {
+      openPanelGeneric($cardSection[0]);
+      closePanelGeneric($payNowBox[0]);
+    } else if (checkedPayment === "paynow") {
+      openPanelGeneric($payNowBox[0]);
+      closePanelGeneric($cardSection[0]);
+    } else {
+      closePanelGeneric($cardSection[0]);
+      closePanelGeneric($payNowBox[0]);
+    }
   }
   initPaymentHandlers();
-  /* ---------------------------
-     Date/time combine on submit (hidden input "order_datetime")
-     --------------------------- */
-  if (checkoutForm) {
-    checkoutForm.addEventListener("submit", function (e) {
-      // gather date & time fields (if present)
-      const dateEl = document.getElementById("order-date");
-      const timeEl = document.getElementById("order-time");
 
-      if (dateEl && timeEl) {
-        const date = dateEl.value;   // YYYY-MM-DD
-        const time = timeEl.value;   // HH:MM
+  // Form submit
+  $checkoutForm.on("submit", function (e) {
+    const date = $("#order-date").val();
+    const time = $("#order-time").val();
+    if (date && time) {
+      $("<input>", {
+        type: "hidden",
+        name: "order_datetime",
+        value: `${date} ${time}:00`,
+      }).appendTo(this);
+    } else if ($("#order-date").length && $("#order-time").length) {
+      alert("Please select both date and time.");
+      e.preventDefault();
+      return;
+    }
+    if ($deliveryFeeInput.length === 0) {
+      $("<input>", {
+        type: "hidden",
+        name: "delivery_fee",
+        value: "0",
+      }).appendTo(this);
+    }
+  });
 
-        if (!date || !time) {
-          alert("Please select both date and time.");
-          e.preventDefault();
-          return;
-        }
-
-        const finalDateTime = `${date} ${time}:00`;
-
-        // attach hidden input
-        let hidden = document.createElement("input");
-        hidden.type = "hidden";
-        hidden.name = "order_datetime";
-        hidden.value = finalDateTime;
-        this.appendChild(hidden);
-      }
-
-      // ensure delivery_fee is present (already created earlier)
-      if (!deliveryFeeInput && this) {
-        const fallback = document.createElement("input");
-        fallback.type = "hidden";
-        fallback.name = "delivery_fee";
-        fallback.value = "0";
-        this.appendChild(fallback);
-      }
-    });
-  }
-
-  /* ---------------------------
-     Keep panel heights correct on resize
-     --------------------------- */
-  window.addEventListener("resize", () => {
-    [deliveryPanel, pickupPanel, cardSection].forEach(panel => {
-      if (panel && !panel.classList.contains("hidden")) {
-        panel.style.maxHeight = panel.scrollHeight + "px";
+  // Resize handler
+  $(window).on("resize", function () {
+    [$deliveryPanel[0], $pickupPanel[0], $cardSection[0]].forEach((panel) => {
+      if (panel && !$(panel).hasClass("hidden")) {
+        $(panel).css("maxHeight", panel.scrollHeight + "px");
       }
     });
   });
-
 });

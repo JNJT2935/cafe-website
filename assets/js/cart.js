@@ -1,48 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(function () {
+  // PLUS
+  $(".qty-plus").on("click", function () {
+    updateCart($(this).data("cartId"), "plus");
+  });
 
-    // PLUS
-    document.querySelectorAll(".qty-plus").forEach(btn => {
-        btn.addEventListener("click", () => {
-            updateCart(btn.dataset.cartId, "plus");
-        });
-    });
+  // MINUS
+  $(".qty-minus").on("click", function () {
+    updateCart($(this).data("cartId"), "minus");
+  });
 
-    // MINUS
-    document.querySelectorAll(".qty-minus").forEach(btn => {
-        btn.addEventListener("click", () => {
-            updateCart(btn.dataset.cartId, "minus");
-        });
-    });
-
-    // DELETE
-    document.querySelectorAll(".delete-item").forEach(btn => {
-        btn.addEventListener("click", () => {
-            updateCart(btn.dataset.cartId, "delete");
-        });
-    });
+  // DELETE
+  $(".delete-item").on("click", function () {
+    updateCart($(this).data("cartId"), "delete");
+  });
 });
 
 function updateCart(cartId, action) {
-    fetch("../backend/checkout/update_cart.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `cart_id=${cartId}&action=${action}`
-    })
-    .then(res => res.json())
-    .then(data => {
+  $.ajax({
+    url: "../backend/checkout/update_cart.php",
+    type: "POST",
+    data: { cart_id: cartId, action: action },
+    dataType: "json",
+    success: function (data) {
+      if (data.deleted) {
+        $("[data-cart-id='" + cartId + "']")
+          .closest(".cart-item-card")
+          .remove();
+      } else {
+        $("#qty-" + cartId).text(data.quantity);
+      }
+    },
+  });
 
-        if (data.deleted) {
-            document.querySelector(`[data-cart-id='${cartId}']`)
-                .closest(".cart-item-card")
-                .remove();
-        } else {
-            document.getElementById("qty-" + cartId).textContent = data.quantity;
-        }
-
-    });
-    // reload
-    setTimeout(() => {
-        location.reload();
-    }, 600)
+  // reload
+  setTimeout(function () {
+    location.reload();
+  }, 600);
 }
-
