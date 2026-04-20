@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #BA9D8A;
+}
+main h2 {
+    margin: 30px;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 15px;
+    margin: 20px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: auto;
+}
+
+.order-items p {
+    margin: 3px 0;
+    color: #a36b6b;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* STATUS COLORS */
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Pending = Blue */
+.status.pending {
+    background: #e0f0ff;
+    color: #007bff;
+}
+
+/* Completed / Done = Green */
+.status.completed,
+.status.done {
+    background: #e6f9ec;
+    color: #28a745;
+}
+
+.empty {
+    box-sizing: border-box;
+    text-align: center;
+    margin: 100px 100px;
+    color: #1d0505;
+}
