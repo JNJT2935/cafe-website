@@ -7,22 +7,68 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/menu.css">
 </head>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function () {
+
+    function showToast(message) {
+        let toast = $(".toast");
+
+        toast.text(message);
+
+        toast.removeClass("show");
+
+        setTimeout(() => {
+            toast.addClass("show");
+        }, 10);
+
+        setTimeout(() => {
+            toast.removeClass("show");
+        }, 2000);
+    }
+
+    $(".add-to-cart-form").submit(function (e) {
+        e.preventDefault();
+
+        let form = $(this);
+
+        $.ajax({
+            url: "/backend/database/addtocart.php",
+            method: "POST",
+            data: form.serialize(),
+
+            success: function (response) {
+                console.log("Response:", response);
+
+                if (response.trim() === "success") {
+                    showToast("Item added to cart!");
+
+                    form.find("button").text("Added");
+
+                    setTimeout(() => {
+                        form.find("button").text("Add to Cart");
+                    }, 1500);
+                    
+                } else {
+                    showToast(response);
+                }
+            },
+
+            error: function () {
+                showToast("Server error occurred");
+            }
+        });
+
+    });
+
+});
+</script>
+
+<div class="toast"></div>
+
 <body>
 <h1 class="menu-title">Our Coffee Menu</h1>
-
-<?php if (isset($_GET['added'])): ?>
-    <div style="
-        background: #d4edda; 
-        color:#155724; 
-        padding:10px; 
-        width:90%; 
-        margin:10px auto; 
-        border-radius:5px; 
-        text-align:center;
-        border:1px solid #c3e6cb;">
-        Item added to cart!
-    </div>
-<?php endif; ?>
 
 <div class="menu-container">
 
@@ -36,7 +82,7 @@
             <p2>Bold in flavor, small in size. The essence of every coffee drink is this potent, fragrant burst of pure coffee bliss. Ideal for the true coffee purist or for a quick pick-me-up.</p2>
             <span class="price">Rs 100</span>
 
-            <form action="../../../backend/database/addtocart.php" method="POST">
+            <form class="add-to-cart-form">
                 <input type="hidden" name="item_id" value="1" required>
                 <input type="hidden" name="item_name" value="Espresso" required>
                 <input type="hidden" name="item_price" value="100" required>
@@ -55,7 +101,7 @@
             <p2>A strong espresso kiss. Every sip of the Macchiato, a potent espresso shot that is delicately "stained" with creamy milk foam, strikes the ideal balance between strength and softness.</p2>
             <span class="price">Rs 160</span>
             
-            <form action="../../../backend/database/addtocart.php" method="POST">
+            <form class="add-to-cart-form">
                 <input type="hidden" name="item_id" value="2" required>
                 <input type="hidden" name="item_name" value="Machiato" required>
                 <input type="hidden" name="item_price" value="160" required>
@@ -75,7 +121,7 @@
             <p2>It's bold, smooth, and never bitter. For those who enjoy the depth of espresso with the simplicity of a traditional brew, the Americano combines the richness of espresso with hot water to create a lighter, longer drink.</p2>
             <span class="price">Rs 110</span>
 
-            <form action="../../../backend/database/addtocart.php" method="POST">
+            <form class="add-to-cart-form">
                 <input type="hidden" name="item_id" value="3" required>
                 <input type="hidden" name="item_name" value="Americano" required>
                 <input type="hidden" name="item_price" value="110" required>
@@ -95,7 +141,7 @@
             <p2><wrapped-text>Gentle, creamy, and exquisitely soothing. The Latte, the preferred beverage for people who prefer smooth and calming drinks, combines velvety steamed milk with a shot of espresso and is topped with a light foam.</p2>
             <span class="price">Rs 175</span>
 
-            <form action="../../../backend/database/addtocart.php" method="POST">
+            <form class="add-to-cart-form">
                 <input type="hidden" name="item_id" value="4" required>
                 <input type="hidden" name="item_name" value="Coffee Latte" required>
                 <input type="hidden" name="item_price" value="175" required>
@@ -115,7 +161,7 @@
             <p2>Character-rich, fluffy, and creamy. Body, texture, and heart are all expertly balanced in the Cappuccino, which is a cloud of rich milk foam over strong espresso.</p2>
             <span class="price">Rs 165</span>
 
-            <form action="../../../backend/database/addtocart.php" method="POST">
+            <form class="add-to-cart-form">
                 <input type="hidden" name="item_id" value="5" required>
                 <input type="hidden" name="item_name" value="Cappuccino" required>
                 <input type="hidden" name="item_price" value="165" required>
@@ -135,7 +181,7 @@
             <p2><wrapped-text>Coffee meets dessert. The Affogato, which consists of a scoop of cold, creamy vanilla ice cream and a shot of hot espresso, is decadent, spectacular, and completely unforgettable.</p2>
             <span class="price">Rs 150</span>
 
-            <form action="../../../backend/database/addtocart.php" method="POST">
+            <form class="add-to-cart-form">
                 <input type="hidden" name="item_id" value="6" required>
                 <input type="hidden" name="item_name" value="Affogato" required>
                 <input type="hidden" name="item_price" value="150" required>
