@@ -252,6 +252,7 @@ if ($result && $result->num_rows > 0) {
     <?php include '../assets/includes/cart_footer.php'; ?>
 
     <!--js-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../assets/js/checkout_page.js"></script>
 
 </body>
