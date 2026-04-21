@@ -1,29 +1,32 @@
 <?php
 require 'dbconnect.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    die("Invalid access");
+if (
+    !isset($_POST['item_id']) ||
+    !isset($_POST['item_name']) ||
+    !isset($_POST['item_price'])
+) {
+    echo "Invalid form submission";
+    exit();
 }
 
-$item_id    = $_POST['item_id'] ?? null;
-$item_name  = $_POST['item_name'] ?? null;
-$item_price = $_POST['item_price'] ?? null;
+$item_id = intval($_POST['item_id']);
+$item_name = $_POST['item_name'];
+$item_price = floatval($_POST['item_price']);
 
-if (!$item_id || !$item_name || !$item_price) {
-    die("Invalid item data");
+if ($item_id <= 0 || $item_price <= 0) {
+    echo "Invalid item data";
+    exit();
 }
 
-$item_id    = intval($item_id);
-$item_name  = mysqli_real_escape_string($conn, $item_name);
-$item_price = floatval($item_price);
+$stmt = $conn->prepare("INSERT INTO cart (item_id, item_name, price) VALUES (?, ?, ?)");
+$stmt->bind_param("isd", $item_id, $item_name, $item_price);
 
-$sql = "INSERT INTO cart (item_id, item_name, price) 
-        VALUES ('$item_id', '$item_name', '$item_price')";
-
-if (mysqli_query($conn, $sql)) {
-    header("Location: ../../pages/menu/fullmenu.php?added=1");
-    exit;
+if ($stmt->execute()) {
+    echo "success";
 } else {
-    echo "Database error: " . mysqli_error($conn);
+    echo "DB error: " . $stmt->error;
 }
+
+$stmt->close();
 ?>
