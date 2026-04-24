@@ -1,36 +1,92 @@
-<link rel="stylesheet" href="assets/css/footer.css">
-<footer class="coffee-footer">
-    <div class="footer-inner">
-        <div class="footer-left">
-            <div class="footer-logo">
-                <a href="pages/Home_Page.php">
-                    <img src="assets/images/header_icon/coffee_logo.svg" alt="Coffee Shop Logo" class="logo-img">
-                    <span class="logo-text">COFFEE SHOP</span>
-                </a>
-            </div>
-        
-            <div class="footer-social">
-                <h2>Social Media</h2>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                </div>
-                <p>Follow Us Here</p>
-            </div>
-        </div>
+<?php
+    if (isset($_POST['sub-btn'])) {
+        $email = $_POST['subemail'];
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-        <div class="footer-contact">
-            <h4>Contact Details</h4>
-            <p><span>Address:</span> Reduit Moka, University of Mauritius, Phase 2 Building</p>
-            <p><span>Phone number:</span> +230 430 2026</p>
-            <p><span>Email Address:</span> coffeeshop@gmail.com</p>
-            <p><i class="fa-brands fa-whatsapp"></i> <span>Whatsapp:</span> +230 5205 2026</p>
-        </div>
+        $select_subscribers = $conn->prepare("SELECT * FROM `subscribe` WHERE user_id = ?");
+        $select_subscribers->execute([$user_id]);
 
-        <div class="footer-right">
-            <p>© 2025 Coffee Shop. All Rights Reserved.</p>
-        </div>
+        if ($select_subscribers->rowCount() > 0) {
+            $warning_msg[] = "You are already subscribed!";
+        } else {
+            $insert_subscribers = $conn->prepare("INSERT INTO `subscribe` (user_id, email) VALUES (?, ?)");
+            $insert_subscribers->execute([$user_id, $email]);
+            $success_msg[] = "Thank you for subscribing";
+        }
+    }
+?>
+
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Footer</title>
+</head>
+<body>
+    <div class="top-footer">
+        <h2><i class="bx bx-envelope"></i>Sign Up For Newsletters</h2>
+        <form action="" method="post">
+            <div class="input-field">
+                <input type="email" name="subemail" required placeholder="Enter Your Email" maxlength="38"
+                oninput="this.value = this.value.replace(/\s/g, '')">
+                <button type="submit" name="sub-btn" class="btn">Subscribe</button>
+            </div>
+        </form>
     </div>
 
-</footer>
+    <footer>
+        <div class="overlay"></div>
+            <div class="footer-content">
+                <div class="inner-footer">
+                    <div class="card">
+                        <h3>About Us</h3>
+                        <ul>
+                            <li>About Us</li>
+                            <li>Our Differences</li>
+                            <li>Community Matters</li>
+                            <li>Press</li>
+                            <li>Blog</li>
+                            <li>Video Gallery</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Services</h3>
+                        <ul>
+                            <li>Orders</li>
+                            <li>Help Center</li>
+                            <li>Shipping</li>
+                            <li>Term of Use</li>
+                            <li>Account Details</li>
+                            <li>My Account</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Locations</h3>
+                        <ul>
+                            <li>Terre Rouge, TR</li>
+                            <li>Port-Louis, PL</li>
+                            <li>Curepipe, CR</li>
+                            <li>Rose-Hill, RH</li>
+                            <li>Flacq, FQ</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Connect With Us</h3>
+                        <p>Follow us on social media for updates and special offers</p>
+                        <div class="social-links">
+                            <i class="bx bxl-instagram"></i>
+                            <i class="bx bxl-twitter"></i>
+                            <i class="bx bxl-facebook"></i>
+                            <i class="bx bxl-whatsapp"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-footer">
+                    <p>&copy; 2025 All Rights Reserved - Coffee</p>
+                </div>
+            </div>
+    </footer>
+
+</body>
+</html>

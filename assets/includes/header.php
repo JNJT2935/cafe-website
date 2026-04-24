@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="assets/css/header.css">
 <header class="main-header">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <div class="header-left">
         <!-- LOGO -->
         <a href="pages/Home_Page.php" class="logo">
-            <img src="assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
+            <img src="..\assets\images\header_icon\coffee_logo.svg" alt="Coffee Shop Logo">
             <span>Coffee Shop</span>
         </a>
     </div>
