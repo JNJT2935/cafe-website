@@ -1,6 +1,8 @@
 $(document).ready(function () {
     function showFormMessage(type, message) {
         $("#form-message")
+            .stop(true, true)
+            .hide()
             .removeClass("success-message error-message")
             .addClass(type === "success" ? "success-message" : "error-message")
             .show();
@@ -9,10 +11,12 @@ $(document).ready(function () {
     }
 
     function hideFormMessage() {
-        $("#form-message").fadeOut(function () {
-            $(this).removeClass("success-message error-message");
-            $("#form-message-text").text("");
-        });
+        $("#form-message")
+            .stop(true, true)
+            .fadeOut(function () {
+                $(this).removeClass("success-message error-message");
+                $("#form-message-text").text("");
+            });
     }
 
     function clearFieldErrors() {
@@ -37,7 +41,13 @@ $(document).ready(function () {
         e.preventDefault();
 
         clearFieldErrors();
-        hideFormMessage();
+
+        // Cancel any previous hide/show animation and clear old message immediately
+        $("#form-message")
+            .stop(true, true)
+            .hide()
+            .removeClass("success-message error-message");
+        $("#form-message-text").text("");
 
         const formData = {
             action: "submit_contact",
