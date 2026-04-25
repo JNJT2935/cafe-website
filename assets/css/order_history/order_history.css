@@ -70,11 +70,29 @@ main h2 {
     color: #007bff;
 }
 
+/* Out for delivery = yellow */
+.status.in {
+    background: #e0f0ff;
+    color: #00c8ff;
+}
+
+/* Out for delivery = yellow */
+.status.out {
+    background: #fbf9da;
+    color: #ffd500;
+}
+
 /* Completed / Done = Green */
 .status.completed,
 .status.done {
     background: #e6f9ec;
     color: #28a745;
+}
+
+/* Out for cancel = yellow */
+.status.cancel {
+    background: #ffd7d7;
+    color: #ff0000;
 }
 
 .empty {
