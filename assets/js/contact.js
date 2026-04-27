@@ -42,7 +42,6 @@ $(document).ready(function () {
 
         clearFieldErrors();
 
-        // Cancel any previous hide/show animation and clear old message immediately
         $("#form-message")
             .stop(true, true)
             .hide()
