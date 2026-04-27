@@ -2,25 +2,33 @@
 include('../assets/includes/connect.php');
 session_start();
 
+// Create CSRF token for form submission
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
+ 
+// Err Variables
 $fnameErr = $lnameErr = $emailErr = $messageErr = "";
+
+// Field Variables
 $fname = $lname = $email = $message = "";
 
+// Basic input cleaning
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
     return $data;
 }
 
+// Handle AJAX form submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header('Content-Type: application/json');
-
+    
+    // Read JSON sent by AJAX
     $rawData = file_get_contents("php://input");
     $data = json_decode($rawData, true);
-
+    
+    // Check JSON structure
     if (!is_array($data)) {
         echo json_encode([
             "status" => "error",
@@ -29,7 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
         exit();
     }
-
+    
+    // Check request action
     if (!isset($data['action']) || $data['action'] !== 'submit_contact') {
         echo json_encode([
             "status" => "error",
@@ -38,7 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
         exit();
     }
-
+    
+    // Check CSRF token
     if (!isset($data['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $data['csrf_token'])) {
         echo json_encode([
             "status" => "error",
@@ -47,7 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
         exit();
     }
-
+    
+    // Validate First Name
     if (empty($data["fname"])) {
         $fnameErr = "* Field is required";
     } else {
@@ -59,7 +70,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $fnameErr = "* Only letters, spaces, apostrophes and hyphens are allowed";
         }
     }
-
+    
+    // Validate Last Name
     if (empty($data["lname"])) {
         $lnameErr = "* Field is required";
     } else {
@@ -71,7 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $lnameErr = "* Only letters, spaces, apostrophes and hyphens are allowed";
         }
     }
-
+    
+    // Validate Email
     if (empty($data["email"])) {
         $emailErr = "* Field is required";
     } else {
@@ -83,7 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $emailErr = "* Email address is too long";
         }
     }
-
+    
+    // Validate Message
     if (empty($data["message"])) {
         $messageErr = "* Field is required";
     } else {
@@ -104,9 +118,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ]);
         exit();
     }
-
+    
     if ($fnameErr === "" && $lnameErr === "" && $emailErr === "" && $messageErr === "") {
         try {
+            // Save contact message to database
             $stmt = $conn->prepare("
                 INSERT INTO contact (firstname, lastname, email, message)
                 VALUES (?, ?, ?, ?)
@@ -166,6 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <main>
     <section class="contact-page">
         <div class="contact-wrapper">
+            <!-- ABOUT US -->
             <div class="contact-left">
                 <h2>About Us</h2>
 
@@ -173,7 +189,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <p>We believe coffee is more than just a drink — it's a way to connect people. That's why our platform is designed to be simple, secure, and customer-friendly, allowing you to explore, order, and enjoy your favorite coffee with ease.</p>
                 <p>Whether you are a casual coffee lover or a passionate enthusiast, our goal is to serve you with fresh products, reliable service, and a smooth online experience.</p>
             </div>
-
+            
+            <!-- CONTACT US -->
             <div class="contact-right">
                 <div class="form-header">
                     <h2>Contact Us</h2>
