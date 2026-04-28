@@ -104,7 +104,7 @@ endif;
                 <h2>Login Required</h2>
                 <p>You must log in to view your cart and continue shopping.</p>
 
-                <a href="logging.php" class="login-btn">Login</a>
+                <a href="login.php" class="login-btn">Login</a>
                 <a href="register.php" class="register-btn">Create an Account</a>
             </div>
         </div>
