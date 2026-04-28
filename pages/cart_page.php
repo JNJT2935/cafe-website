@@ -2,64 +2,66 @@
 session_start();
 include "../backend/database/db.php";
 
-// For now use a static user_id until login system exists
-$user_id = 1;
+// ---------- Basic auth check ----------
+$user_id = ($_SESSION['user_id']);
 
 $not_logged_in = false;
 
 if (!isset($_SESSION['user_id'])) {
-    $not_logged_in = false; //change to true later
+    $not_logged_in = true;
+    $logged_in = false;
 }
-
 
 // Fetch cart items
-$sql = "SELECT 
-            c.cart_id,
-            c.quantity,
-            p.product_id,
-            p.name,
-            p.description,
-            p.price,
-            p.image_source,
-            p.stock_quantity
-        FROM cart c INNER JOIN product p
-        ON c.product_id = p.product_id
-        WHERE c.user_id = $user_id";
+if ($logged_in):
+    $sql = "SELECT 
+                c.cart_id,
+                c.quantity,
+                p.product_id,
+                p.name,
+                p.description,
+                p.price,
+                p.image_source,
+                p.stock_quantity
+            FROM cart c INNER JOIN product p
+            ON c.product_id = p.product_id
+            WHERE c.user_id = $user_id";
 
-$result = $conn->query($sql);
+    $result = $conn->query($sql);
 
-$cart_items = [];
-$out_of_stock = [];
-$cart_total = 0;
-$total_quantity = 0;
-$item_count = 0;
-$total_quantity = 0;
+    $cart_items = [];
+    $out_of_stock = [];
+    $cart_total = 0;
+    $total_quantity = 0;
+    $item_count = 0;
+    $total_quantity = 0;
 
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
 
-        // Compute item total
-        $row['item_total'] = $row['price'] * $row['quantity'];
-        // Add to cart array
-        $cart_items[] = $row;
-        // Add to full cart total
-        $cart_total += $row['item_total'];
+            // Compute item total
+            $row['item_total'] = $row['price'] * $row['quantity'];
+            // Add to cart array
+            $cart_items[] = $row;
+            // Add to full cart total
+            $cart_total += $row['item_total'];
+        }
+
+        //computer number of individual item
+        $item_count = count($cart_items);
+
+        // compute the total number if item
+        foreach ($cart_items as $item) {
+            $total_quantity += $item['quantity'];
+        }
+        //checking if quantity_cart > quantity_stock 
+        foreach ($cart_items as $item) {
+        if ($item['quantity'] > $item['stock_quantity']) {
+            $out_of_stock[] = $item;
+        }
     }
-
-    //computer number of individual item
-    $item_count = count($cart_items);
-
-    // compute the total number if item
-    foreach ($cart_items as $item) {
-        $total_quantity += $item['quantity'];
     }
-    //checking if quantity_cart > quantity_stock 
-    foreach ($cart_items as $item) {
-    if ($item['quantity'] > $item['stock_quantity']) {
-        $out_of_stock[] = $item;
-    }
-}
-}
+endif;
 ?>
 
 <!DOCTYPE html>

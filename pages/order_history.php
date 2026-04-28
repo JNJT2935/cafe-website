@@ -2,15 +2,15 @@
 session_start();
 include "../backend/database/db.php";
 
-// For now use a static user_id until login system exists
-$user_id = 1;
+// ---------- Basic auth check ----------
+$user_id = $_SESSION['user_id'];
 
 $not_logged_in = false;
 // Check if user logged in
 if (!isset($_SESSION['user_id'])) {
-    $not_logged_in = false;
-    //header("Location: ../pages/home.php");
-    //exit();
+    $not_logged_in = true;
+    header("Location: ../pages/home.php");
+    exit();
 }
 
 //$user_id = $_SESSION['user_id'];

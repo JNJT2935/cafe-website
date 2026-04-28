@@ -1,8 +1,17 @@
 <?php
 session_start();
 include "../backend/database/db.php";
-// static untill logging page is complete
-$user_id = 1;
+
+// ---------- Basic auth check ----------
+$$user_id = $_SESSION['user_id'];
+
+$not_logged_in = false;
+// Check if user logged in
+if (!isset($_SESSION['user_id'])) {
+    $not_logged_in = true;
+    header("Location: ../pages/home.php");
+    exit();
+    }
 
 // Check if cart is empty before giving access
 $is_empty = $conn->prepare("SELECT COUNT(*) AS count FROM cart WHERE user_id = ?");

@@ -4,7 +4,15 @@ include "../database/db.php";
 
 // ---------- Basic auth check ----------
 
-$user_id = 1;
+$user_id = $_SESSION['user_id'];
+
+$not_logged_in = false;
+// Check if user logged in
+if (!isset($_SESSION['user_id'])) {
+    $not_logged_in = true;
+    header("Location: ../pages/home.php");
+    exit();
+    }
 
 // ---------- Helper: send user back with error ----------
 function fail($msg, $redirect = "../../pages/checkout_page.php") {
