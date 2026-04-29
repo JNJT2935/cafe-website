@@ -134,3 +134,7 @@ body {
     background: #c9a44c;
     color: rgba(40, 4, 4, 1);
 }
+
+.footer_background {
+    background-color: #3D240C;
+}

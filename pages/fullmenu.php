@@ -6,6 +6,8 @@
     <title>Coffee Shop Home Page</title>
     <link rel="stylesheet" type="text/css" href="..\assets\css\menu.css">
     <link rel="stylesheet" href="..\assets\css\header.css">
+    <link rel="stylesheet" href="../assets/css/footer.css?v=<?php echo time(); ?>">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -193,6 +195,9 @@ $(document).ready(function () {
             </form>
         </div>
     </div>
+</div>
+<div class="footer_background">
+    <?php include '../assets/includes/footer.php'; ?>
 </div>
 
 </body>
