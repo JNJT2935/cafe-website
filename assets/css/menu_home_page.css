@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url(/assets/images/menu/bg_1.jpg);
+    color: white;
+    background-size: cover;
+    background-position: center;
+}
+
+.menu-home {
+    display: flex;
+    justify-content: space-between;
+    padding: 80px;
+    text-align: right;
+}
+
+.menu-text {
+    max-width: 40%;
+}
+
+@font-face {
+    font-family: Flamenco;
+    src: url('/assets/fonts/Flamenco/Flamenco-Regular.ttf') format('truetype');
+}
+
+.menu-home h2  {
+    color: #B68C4D;
+    letter-spacing: 0px;
+    font-family: "Flamenco", system-ui;
+    font-size: 60px;
+    font-weight: 25;
+    margin-left: 560px;
+    margin-top: 130px;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+.menu-home h1 {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    text-align: right;
+    font-family: "Roboto", system-ui;
+    font-weight: 200;
+    font-size: 60px;
+    margin-left: 540px;
+    margin-top: 0px;
+    white-space: nowrap;
+    color: rgb(216, 214, 214);
+}
+
+@font-face {
+    font-family: Poppins;
+    src: url('/assets/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('/assets/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+}
+
+.menu-home p {
+    font-family: "Poppins", system-ui;
+    text-align: right;
+    margin-right: -305px;
+    margin-left: 150px;
+    padding-right: 20px;
+    font-size: 17px;
+    word-wrap: break-word;
+}
+
+.menu-btn {
+    display: inline-block;
+    padding: 20px 55px;
+    background: rgba(182, 140, 77, 1);
+    font-family: "Poppins-Bold", system-ui;
+    color: rgba(40, 4, 4, 1);
+    text-decoration: none;
+    border-radius: 50px;
+    margin-top: 75px;
+    white-space: nowrap;
+    margin-left: 610px;
+}
+
+.menu-images {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    margin-top: 70px;
+    gap: 20px;
+}
+
+.menu-images img {
+    width: 220px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.menu-section {
+    padding: 60px;
+}
+
+.menu-section h1 {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+
+.menu-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.menu-card {
+    display: flex;
+    background: #1d1d1d;
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+}
+
+.menu-card img {
+    width: 140px;
+    height: 140px;
+    border-radius: 15px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.menu-info h3 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.available {
+    color: limegreen;
+    font-weight: bold;
+    font-size: 12px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.menu-info p {
+    font-size: 14px;
+    margin: 14px 0;
+    color: #cccccc;
+}
+
+.price {
+    font-size: 18px;
+    color: #c9a44c;
+    margin-top: 10px;
+}
+
+.add-btn {
+    padding: 8px 20px;
+    border: 1px solid #c9a44c;
+    background: none;
+    color: #c9a44c;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.add-btn:hover {
+    background: #c9a44c;
+    color: black;
+}

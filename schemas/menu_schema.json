@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MenuItem",
+  "type": "object",
+  "required": ["item_id", "item_name", "item_price", "description"],
+  "properties": {
+
+    "item_id": {
+      "type": "integer",
+      "description": "Unique identifier for the menu item"
+    },
+
+    "item_name": {
+      "type": "string",
+      "description": "Name of the coffee or item"
+    },
+
+    "item_price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Price of the item"
+    },
+
+    "description": {
+      "type": "string",
+      "description": "Short description of the item"
+    },
+
+    "image_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Image of the product"
+    },
+
+    "available": {
+      "type": "boolean",
+      "description": "Availability status"
+    }
+  }
+}
