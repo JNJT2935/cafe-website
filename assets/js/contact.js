@@ -1,0 +1,93 @@
+$(document).ready(function () {
+    // Show success or error message
+    function showFormMessage(type, message) {
+        $("#form-message")
+            .stop(true, true)
+            .hide()
+            .removeClass("success-message error-message")
+            .addClass(type === "success" ? "success-message" : "error-message")
+            .show();
+
+        $("#form-message-text").text(message);
+    }
+    
+    // Hide message box
+    function hideFormMessage() {
+        $("#form-message")
+            .stop(true, true)
+            .fadeOut(function () {
+                $(this).removeClass("success-message error-message");
+                $("#form-message-text").text("");
+            });
+    }
+
+    // Clear all field error
+    function clearFieldErrors() {
+        $("#fname_error").text("");
+        $("#lname_error").text("");
+        $("#email_error").text("");
+        $("#message_error").text("");
+    }
+    
+    // Close message and reset form
+    $("#close-message").on("click", function () {
+        hideFormMessage();
+        $("#contactForm")[0].reset();
+        clearFieldErrors();
+    });
+    
+    // Reset button 
+    $("#resetFormBtn").on("click", function () {
+        clearFieldErrors();
+        hideFormMessage();
+    });
+
+    // Submit form with AJAX
+    $("#contactForm").on("submit", function (e) {
+        e.preventDefault();
+
+        clearFieldErrors();
+
+        $("#form-message")
+            .stop(true, true)
+            .hide()
+            .removeClass("success-message error-message");
+        $("#form-message-text").text("");
+
+        const formData = {
+            action: "submit_contact",
+            csrf_token: $('input[name="csrf_token"]').val(),
+            fname: $("#fname").val(),
+            lname: $("#lname").val(),
+            email: $("#email").val(),
+            message: $("#message").val()
+        };
+
+        $.ajax({
+            url: "contacts.php",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    $("#contactForm")[0].reset();
+                    showFormMessage("success", response.message);
+                } else {
+                    showFormMessage("error", response.message);
+                    
+                    // Show PHP validation errors
+                    if (response.errors) {
+                        $("#fname_error").text(response.errors.fname || "");
+                        $("#lname_error").text(response.errors.lname || "");
+                        $("#email_error").text(response.errors.email || "");
+                        $("#message_error").text(response.errors.message || "");
+                    }
+                }
+            },
+            error: function () {
+                showFormMessage("error", "AJAX request failed. Please try again.");
+            }
+        });
+    });
+});
