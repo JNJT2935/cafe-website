@@ -104,7 +104,7 @@
                 <div class="slider-detail">
                     <h1>Fresh Coffee in the morning</h1>
                     <p>Start your day the right way at Coffee Shop. From rich espresso to smooth lattes and freshly baked pastries.</p>
-                    <a href="../pages/product_detail.php" class="btn">Shop Now</a>
+                    <a href="../pages/view_product.php" class="btn">Shop Now</a>
                 </div>
                 <div class="hero-dec-top"></div>
                 <div class="hero-dec-bottom"></div>
