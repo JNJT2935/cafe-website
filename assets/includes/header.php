@@ -58,7 +58,7 @@ if ($user_id) {
 
         <div class="user-dropdown">
             <a href="#" class="header-icon">
-                <i class="fa-regular fa-user"></i>
+                <i class="fa-regular fa-user" title="User Status"></i>
             </a>
 
             <div class="user-box">
@@ -75,13 +75,13 @@ if ($user_id) {
             </div>
         </div>
 
-        <a href="../pages/cart.php" class="header-icon">
-            <i class="fa-solid fa-cart-shopping"></i>
+        <a href="../pages/cart_page.php" class="header-icon">
+            <i class="fa-solid fa-cart-shopping" title="Cart"></i>
             <sup><?= $total_cart_items ?: '' ?></sup>
         </a>
 
-        <a href="../pages/wishlist.php" class="header-icon">
-            <i class="fa-regular fa-heart"></i>
+        <a href="../pages/order_history.php" class="header-icon">
+            <i class="fa-solid fa-bag-shopping" title="Order"></i>
         </a>
 
     </div>

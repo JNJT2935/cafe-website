@@ -1,19 +1,14 @@
 <?php
 session_start();
-include "../backend/database/db.php";
+ include ('../assets/includes/connect.php'); // use the PDO connection
 
 // ---------- Basic auth check ----------
-$user_id = $_SESSION['user_id'];
-
-$not_logged_in = false;
-// Check if user logged in
 if (!isset($_SESSION['user_id'])) {
-    $not_logged_in = true;
     header("Location: ../pages/home.php");
     exit();
 }
 
-//$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 
 // Fetch orders
 $sql = "SELECT o.Order_id, o.Total_paid, o.order_status, o.Order_date
@@ -22,9 +17,9 @@ $sql = "SELECT o.Order_id, o.Total_paid, o.order_status, o.Order_date
         ORDER BY o.Order_date DESC";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bindParam(1, $user_id, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
+$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,26 +30,25 @@ $result = $stmt->get_result();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Title -->
-    <title>Coffee Shop | Cart</title>
+    <title>Coffee Shop | Order History</title>
 
     <!-- CSS link placeholder -->
-    <link rel="stylesheet" href="..\assets\css\header.css">
-    <link rel="stylesheet" href="..\assets\css\order_history\order_history.css">
-    <link rel="stylesheet" href="..\assets\css\cart\cart_footer.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/order_history/order_history.css">
+    <link rel="stylesheet" href="../assets/css/cart/cart_footer.css">
 </head>
 
 <body>
 
     <!-- Header -->
-    <?php include '..\assets\includes\header.php'; ?>
+    <?php include '../assets/includes/header.php'; ?>
 
     <main>
         <h2>My Orders</h2>
 
-        <?php if ($result->num_rows > 0): ?>
-            <?php while ($order = $result->fetch_assoc()): ?>
+        <?php if (count($orders) > 0): ?>
+            <?php foreach ($orders as $order): ?>
                 <?php
-                // Fetch items for each order
                 $order_id = $order['Order_id'];
 
                 $item_sql = "SELECT p.name, oi.quantity
@@ -63,23 +57,23 @@ $result = $stmt->get_result();
                              WHERE oi.order_id = ?";
 
                 $item_stmt = $conn->prepare($item_sql);
-                $item_stmt->bind_param("i", $order_id);
+                $item_stmt->bindParam(1, $order_id, PDO::PARAM_INT);
                 $item_stmt->execute();
-                $items = $item_stmt->get_result();
+                $items = $item_stmt->fetchAll(PDO::FETCH_ASSOC);
                 ?>
 
                 <div class="order-card">
                     <div class="order-header">
                         <span>Order #<?= $order_id ?></span>
                         <span class="status <?= strtolower($order['order_status']) ?>">
-                            <?= $order['order_status'] ?>
+                            <?= htmlspecialchars($order['order_status']) ?>
                         </span>
                     </div>
 
                     <div class="order-items">
-                        <?php while ($item = $items->fetch_assoc()): ?>
+                        <?php foreach ($items as $item): ?>
                             <p><?= htmlspecialchars($item['name']) ?> x<?= $item['quantity'] ?></p>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="order-footer">
@@ -87,15 +81,14 @@ $result = $stmt->get_result();
                         <span>Total: Rs <?= $order['Total_paid'] ?></span>
                     </div>
                 </div>
-            <?php endwhile; ?>
+            <?php endforeach; ?>
         <?php else: ?>
             <p class="empty">You have no orders yet.</p>
         <?php endif; ?>
     </main>
 
     <!-- Footer -->
-        <?php include '../assets/includes/cart_footer.php'; ?>
+    <?php include '../assets/includes/cart_footer.php'; ?>
 
 </body>
-
 </html>

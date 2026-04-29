@@ -6,14 +6,19 @@ include "../backend/database/db.php";
 $user_id = ($_SESSION['user_id']);
 
 $not_logged_in = false;
+$cart_items = [];
+$out_of_stock = [];
+$cart_total = 0;
+$total_quantity = 0;
+$item_count = 0;
+$total_quantity = 0;
 
 if (!isset($_SESSION['user_id'])) {
     $not_logged_in = true;
-    $logged_in = false;
-}
-
-// Fetch cart items
-if ($logged_in):
+} else {
+    // 2. Only get the ID and run SQL if they ARE logged in
+    $user_id = $_SESSION['user_id'];
+    // Fetch cart items
     $sql = "SELECT 
                 c.cart_id,
                 c.quantity,
@@ -28,13 +33,6 @@ if ($logged_in):
             WHERE c.user_id = $user_id";
 
     $result = $conn->query($sql);
-
-    $cart_items = [];
-    $out_of_stock = [];
-    $cart_total = 0;
-    $total_quantity = 0;
-    $item_count = 0;
-    $total_quantity = 0;
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -61,7 +59,7 @@ if ($logged_in):
         }
     }
     }
-endif;
+}
 ?>
 
 <!DOCTYPE html>

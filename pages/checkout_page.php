@@ -3,7 +3,7 @@ session_start();
 include "../backend/database/db.php";
 
 // ---------- Basic auth check ----------
-$$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 
 $not_logged_in = false;
 // Check if user logged in
