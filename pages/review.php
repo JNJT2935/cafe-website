@@ -116,7 +116,7 @@
                 <div class="no-products">
                     <i class="bx bx-coffee"></i>
                     <p>You haven't purchased any products yet.</p>
-                    <a href="menu.php" class="btn">Browse Products</a>
+                    <a href="view_product.php" class="btn">Browse Products</a>
                 </div>
             <?php else: ?>
             <form action="" method="post" class="review-form" id="reviewForm">
