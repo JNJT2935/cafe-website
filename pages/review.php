@@ -179,9 +179,7 @@
                         <label class="product-card-radio">
                             <input type="radio" name="product_id" value="<?php echo $prod['Product_id']; ?>" required>
                             <div class="product-card-inner">
-                                <img src="../assets/images/<?php echo htmlspecialchars($prod['image']); ?>"
-                                     alt="<?php echo htmlspecialchars($prod['name']); ?>"
-                                     onerror="this.src='../assets/images/placeholder.jpg'">
+                                <img src="../assets/images/productimages/<?php echo $prod['image']; ?>" alt="item image">
                                 <span><?php echo htmlspecialchars($prod['name']); ?></span>
                                 <?php if (isset($ratings_map[$prod['Product_id']])): ?>
                                     <small>★ <?php echo $ratings_map[$prod['Product_id']]['avg_rating']; ?>

@@ -222,9 +222,7 @@
 
                     <!-- Image -->
                     <div class="card-image">
-                        <img src="../assets/images/<?php echo htmlspecialchars($p['image_source']); ?>"
-                             alt="<?php echo htmlspecialchars($p['name']); ?>"
-                             onerror="this.src='../assets/images/placeholder.jpg'">
+                        <img src="../assets/images/productimages/<?php echo $p['image_source']; ?>" alt="item image">
 
                         <!-- Category badge -->
                         <span class="category-badge"><?php echo htmlspecialchars($p['category']); ?></span>
