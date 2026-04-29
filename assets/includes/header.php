@@ -51,7 +51,7 @@ if ($user_id) {
         <a href="../pages/home.php" class="<?= $current_page == 'home.php' ? 'active' : '' ?>">Home</a>
         <a href="../pages/menu.php" class="<?= $current_page == 'menu.php' ? 'active' : '' ?>">Menu</a>
         <a href="../pages/review.php" class="<?= $current_page == 'review.php' ? 'active' : '' ?>">Review</a>
-        <a href="../pages/aboutUs.php" class="<?= $current_page == 'aboutUs.php' ? 'active' : '' ?>">About Us</a>
+        <a href="../pages/contacts.php" class="<?= $current_page == 'aboutUs.php' ? 'active' : '' ?>">About Us</a>
     </nav>
 
     <div class="header-right">

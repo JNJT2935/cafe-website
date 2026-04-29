@@ -130,7 +130,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="cart-container">
             <!-- LEFT SIDE — ITEMS -->
             <section class="cart-left">
-                <a href="menu.php" class="back-to-shop">← Back to shopping  </a>
+                <a href="home.php" class="back-to-shop">← Back to shopping  </a>
 
                 <div class="cart-items">
                     <?php if (empty($cart_items)): ?>

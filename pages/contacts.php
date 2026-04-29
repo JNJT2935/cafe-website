@@ -169,6 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="../assets/css/header.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../assets/css/contact.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../assets/css/footer.css?v=<?php echo time(); ?>">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../assets/js/contact.js?v=<?php echo time(); ?>"></script>
@@ -176,7 +177,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
 
-<?php include '../assets/includes/header.php'; ?>
+<div class="header_background">
+    <?php include '../assets/includes/header.php'; ?>
+</div>
 
 <main>
     <section class="contact-page">
@@ -236,8 +239,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </section>
 </main>
+<div class="footer_background">
+    <?php include '../assets/includes/footer.php'; ?>
+</div>
 
-<?php include '../assets/includes/footer.php'; ?>
 
 </body>
 </html>
