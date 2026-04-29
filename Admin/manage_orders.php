@@ -240,7 +240,7 @@ tr:hover {
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../assets/js/orders.js"></script>
+<script src="../assets/js/manage_orders.js"></script>
 
 </body>
 </html>
