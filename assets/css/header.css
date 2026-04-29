@@ -1,117 +1,164 @@
-/*-----global setting-----*/
-* {
+/* ===== RESET ===== */
+html, body {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    font-family: Arial, sans-serif;
+}
+
+* {
     box-sizing: border-box;
 }
 
-.root {
-    --brown: #6b4423;
-    --light-brown: #f4e8d8;
-    --dark-brown: #2d1810;
-    --gold: #d4a373;
-    --red: #c44536;
-    --text-gray: #fff;
-    --light-grey: #666;
-    --border-grey: #ddd;
-    --box-shadow: 0 0 10px rgb(0 0 0/15%);
-    --transition: all 0.3s ease;
-}
+/* ===== HEADER ===== */
+.main-header {
+    width: 101%;
+    left: -5px;
+    height: 80px;
+    padding: 0 60px;
 
-.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    padding: 0.05rem 1%;
-    height: 10%;
-    
-    /* Glass effect */
-    background: rgba(153, 151, 151, 0.1);
-    backdrop-filter: blur(2.5px);
-    -webkit-backdrop-filter: blur(2.5px);
-    border-radius: 0px;  
+    z-index: 1000;
 
-    justify-content: space-between;
-    z-index: 100;
-    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-
-.navbar {
+/* ===== LOGO ===== */
+.logo {
     display: flex;
     align-items: center;
-}
+    gap: 10px;
 
-.header nav a { 
-    margin: 0 20px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #3e2e1f;
     text-decoration: none;
-    color: #fff;
-    font-weight: 500;
 }
 
-.navbar a:hover {
-    color: var(--brown);
+.logo img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
 }
 
-.cart-btn {
-    position: relative;
-    display: inline-block;
-}
-
-.cart-icon {
-    width: 30px;  
-    height: 30px;
-    top: 2px;
-    vertical-align: middle;
-    position: relative;
-}
-
-.cart-btn sup {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: var(--brown);
-    color: #fff;
-    font-size: 0.7rem;
-    padding: 2px 5px;
-    border-radius: 50%;
-}
-
-.search-icon {
-    width: 30px;   
-    height: 30px;
-    vertical-align: middle; 
-    display: inline-block;
-    position: relative;
-    top: 2px;    
-}
-
-.wishlist-icon {
-    width: 30px;   
-    height: 30px;
-    vertical-align: middle; 
-    filter: brightness(0) invert(1);
-    position: relative;
-    top: 2px;     
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    gap: 60px;
 }
 
 .navbar a {
-    font-size: 1.0rem;
-    color: #fff;
     text-decoration: none;
+    color: #3e2e1f;
+    font-size: 20px;
     font-weight: 500;
-    margin-left: 7.5rem;
+    transition: 0.3s ease;
+    position: relative;
 }
 
+.navbar a:hover {
+    color: #e8670b;
+}
+
+.navbar a.active {
+    color: #e8670b;
+    font-weight: 700;
+}
+
+/* underline effect */
+.navbar a.active::after,
+.navbar a:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background: #e8670b;
+}
+
+/* ===== RIGHT ICONS ===== */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-icon {
+    font-size: 22px;
+    color: #3e2e1f;
+    text-decoration: none;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.header-icon:hover {
+    color: #e8670b;
+}
+
+/* counters (cart / wishlist) */
+.header-icon sup {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+
+    background: #e8670b;
+    color: white;
+    font-size: 11px;
+
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+/* ===== USER BOX ===== */
 .user-box {
-    background: #fff;
-    border: 1px solid var(--brown);
-    padding: .01em;
-    outline: none;
-    box-shadow: var(--box-shadow);
-    margin: .2rem 0;
-    width: 25%;
-    font-family: inherit;
+    position: absolute;
+    top: 90px;
+    right: 60px;
+
+    background: white;
+    padding: 15px;
+    width: 220px;
+
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+
+    display: none;
+}
+
+.user-box.active {
+    display: block;
+}
+
+.logout-btn, .login-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 8px;
+    text-align: center;
+
+    background: #e8670b;
+    color: white;
+    text-decoration: none;
+
     border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 850px) {
+    .navbar {
+        display: none;
+    }
+
+    .main-header {
+        padding: 0 20px;
+    }
 }

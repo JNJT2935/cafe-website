@@ -1,80 +1,108 @@
 <?php
-    if (!isset($conn)) {
-        include __DIR__ . '/connect.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-    }
+include __DIR__ . '/connect.php';
 
-    // Make sure user_id exists
-    $user_id = $_SESSION['user_id'] ?? null;
+if (!isset($conn)) {
+    die("Database connection failed in header.php");
+}
 
-    if (isset($_POST['logout'])) {
+$user_id = $_SESSION['user_id'] ?? null;
+$user_name = $_SESSION['user_name'] ?? 'Guest';
+$user_email = $_SESSION['user_email'] ?? 'No Email';
+
+if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
-    header('Location: login.php');
+    header('Location: ../pages/login.php');
     exit();
 }
 
+$current_page = basename($_SERVER['PHP_SELF']);
+
+$total_cart_items = 0;
+
+if ($user_id) {
+
+    $count_cart_items = $conn->prepare("SELECT * FROM cart WHERE user_id = ?");
+    $count_cart_items->execute([$user_id]);
+    $total_cart_items = $count_cart_items->rowCount();
+}
 ?>
 
-<style type="text/css">
-    <?php include('../assets/css/header.css');?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+<?php include(__DIR__ . '/../css/header.css'); ?>
 </style>
 
+<header class="main-header">
 
-<!DOCTYPE html>
-<html lang=en>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Header</title>
-    </head>
-    <body>
-        <header class="header">
-            <div class="flex">
-                <a href="home.php" class="logo"><img src="../assets/images/logo.svg"></a>
-                <nav class="navbar">
-                    <a href="home.php">Home</a>
-                    <a href="about.php">About Us</a>
-                    <a href="menu.php">Menu</a>
-                    <a href="products.php">Products</a>
-                    <a href="review.php">Reviews</a>
-                    <a href="contacts.php">Contacts Us</a>
-                    <a href="blogs.php">Blogs</a>
-                </nav>
-                <div class="icons">
-                    <a href="search_page.php" class="search-btn">
-                        <img src="../assets/images/bx_bx-search-alt-2.svg" alt="Search" class="search-icon">
-                    </a>
-                    <i class="bx bxs-user" id="user-btn"></i>
-                    <?php
-                    $count_wishlist_items = $conn->prepare("SELECT * FROM `wishlist` WHERE user_id = ?");
-                    $count_wishlist_items->execute([$user_id]);
-                    $total_wishlist_items = $count_wishlist_items->rowCount();
-                    ?>
-                    <a href="wishlist.php" class="cart-btn">
-                        <img src="../assets/images/Heart_Icon.svg" alt="Wishlist" class="wishlist-icon">
-                        <sup><?= $total_wishlist_items > 0 ? $total_wishlist_items : '' ?></sup>
-                    </a>
-                    <?php
-                    $count_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
-                    $count_cart_items->execute([$user_id]);
-                    $total_cart_items = $count_cart_items->rowCount();
-                    ?>
-                    <a href="cart.php" class="cart-btn">
-                        <img src="../assets/images/clarity_shopping-cart-solid.svg" alt="Cart" class="cart-icon">
-                        <sup><?= $total_cart_items > 0 ? $total_cart_items : '' ?></sup>
-                    </a>
-                    <i class="bx bx-list-plus" id="menu-btn" style="font-size: 2rem;"></i>
-                </div>
-                <div class="user-box">
-                    <p>Username : <span><?= isset($_SESSION['user_name']) ? $_SESSION['user_name'] : 'Guest';?></span></p>
-                    <p>Email : <span><?= isset($_SESSION['user_email']) ? $_SESSION['user_email'] : 'No Email'; ?></span></p>
+    <div class="header-left">
+        <a href="../pages/home.php" class="logo">
+            <img src="../assets/images/logo.svg" alt="Logo">
+            <span>Coffee Shop</span>
+        </a>
+    </div>
 
+    <nav class="navbar">
+        <a href="../pages/home.php" class="<?= $current_page == 'home.php' ? 'active' : '' ?>">Home</a>
+        <a href="../pages/menu.php" class="<?= $current_page == 'menu.php' ? 'active' : '' ?>">Menu</a>
+        <a href="../pages/review.php" class="<?= $current_page == 'review.php' ? 'active' : '' ?>">Review</a>
+        <a href="../pages/aboutUs.php" class="<?= $current_page == 'aboutUs.php' ? 'active' : '' ?>">About Us</a>
+    </nav>
+
+    <div class="header-right">
+
+        <div class="user-dropdown">
+            <a href="#" class="header-icon">
+                <i class="fa-regular fa-user"></i>
+            </a>
+
+            <div class="user-box">
+                <p>Username: <span><?= htmlspecialchars($user_name); ?></span></p>
+                <p>Email: <span><?= htmlspecialchars($user_email); ?></span></p>
+
+                <?php if ($user_id): ?>
                     <form method="post">
                         <button type="submit" name="logout" class="logout-btn">Log Out</button>
                     </form>
-                </div>
+                <?php else: ?>
+                    <a href="../pages/login.php" class="login-btn">Login</a>
+                <?php endif; ?>
             </div>
-        </header>
-    </body>
-</html>
+        </div>
+
+        <a href="../pages/cart.php" class="header-icon">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <sup><?= $total_cart_items ?: '' ?></sup>
+        </a>
+
+        <a href="../pages/wishlist.php" class="header-icon">
+            <i class="fa-regular fa-heart"></i>
+        </a>
+
+    </div>
+
+    <script>
+    const dropdown = document.querySelector('.user-dropdown');
+    const userBox  = document.querySelector('.user-box');
+
+    // Toggle on user icon click
+    dropdown.querySelector('a').addEventListener('click', function (e) {
+        e.preventDefault();
+        userBox.classList.toggle('active');
+    });
+
+    // Close when clicking anywhere outside
+    document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target)) {
+            userBox.classList.remove('active');
+        }
+    });
+    
+    </script>
+
+</header>

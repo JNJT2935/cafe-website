@@ -4,7 +4,13 @@ session_start();
 
 // Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
-    header("Location: home.php");
+
+    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
+        header("Location: ../admin/admin.php");
+    } else {
+        header("Location: home.php");
+    }
+
     exit();
 }
 
@@ -26,12 +32,20 @@ if (isset($_POST['submit'])) {
             $_SESSION['user_id']    = $row['user_id'];
             $_SESSION['user_name']  = $row['name'];
             $_SESSION['user_email'] = $row['email'];
+             $_SESSION['user_type']  = $row['User_type']; 
 
-            header("Location: home.php");
+            // ---- ADMIN OR USER REDIRECT ----
+            if ($row['User_type'] === 'admin') {
+                header("Location: ../admin/admin.php");
+            } else {
+                header("Location: home.php");
+            }
             exit();
+ 
         } else {
             $warning_msg[] = "Incorrect email or password";
         }
+
     } else {
         $warning_msg[] = "Incorrect email or password";
     }
@@ -44,8 +58,40 @@ if (isset($_POST['submit'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Coffee Shop Website - Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../assets/css/header.css?v=<?php echo time(); ?>">
+
+    <style>
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .password-wrapper input {
+        width: 100% !important;  /* override the 85% from style.css */
+        padding-right: 42px !important;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #888;
+        font-size: 16px;
+        user-select: none;
+        z-index: 10;
+    }
+
+    .toggle-password:hover {
+        color: #e8670b;
+    }
+    </style>
+
 </head>
 <body>
     <?php include('../assets/includes/header.php'); ?>
@@ -63,7 +109,8 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="input-field">
                     <p> Your Password <sub>*</sub></p>
-                    <input type="password" name="pass" required placeholder="Enter Your Password" maxlength="50" oninput="this.value = this.value.replace(/\s/g,'')">
+                    <input type="password" id="passInput" name="pass" required placeholder="Enter Your Password" maxlength="50" oninput="this.value = this.value.replace(/\s/g,'')">
+                    <i class="fa-regular fa-eye toggle-password" id="togglePass"></i>
                 </div>
                 <input type="submit" name="submit" value="Login Now" class="btn">
                 <p>do not have an account? <a href="register.php"> Register Now </a></p>
@@ -77,6 +124,28 @@ if (isset($_POST['submit'])) {
         </section>
     </div>
     <?php include('../assets/includes/alert.php');?>
+
+    <script>
+    const togglePass = document.getElementById('togglePass');
+    const passInput  = document.getElementById('passInput');
+
+    togglePass.addEventListener('click', function () {
+        const isPassword = passInput.type === 'password';
+        
+        // Toggle input type
+        passInput.type = isPassword ? 'text' : 'password';
+        
+        // Swap the icon
+        if (isPassword) {
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+        } else {
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+        }
+    });
+    </script>
+
 </body>
 </html>
 
