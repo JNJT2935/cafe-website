@@ -122,7 +122,7 @@
                 <div class="slider-detail">
                     <h1>Nature's Morning Boost</h1>
                     <p>Embrace sustainable energy with our ethically sourced green coffee collection.</p>
-                    <a href="../pages/view_products.php" class="btn">Shop Now</a>
+                    <a href="../pages/view_product.php" class="btn">Shop Now</a>
                 </div>
                 <div class="hero-dec-top"></div>
                 <div class="hero-dec-bottom"></div>
@@ -131,7 +131,7 @@
                 <div class="slider-detail">
                     <h1>Wellness in Every Sip</h1>
                     <p>Discover how coffee supports metabolism and overall vitality naturally.</p>
-                    <a href="../pages/view_products.php" class="btn">Shop Now</a>
+                    <a href="../pages/view_product.php" class="btn">Shop Now</a>
                 </div>
                 <div class="hero-dec-top"></div>
                 <div class="hero-dec-bottom"></div>
@@ -140,7 +140,7 @@
                 <div class="slider-detail">
                     <h1>Farm to Cup Perfection</h1>
                     <p>Taste the difference of carefully selected, premium black coffee beans.</p>
-                    <a href="../pages/view_products.php" class="btn">Shop Now</a>
+                    <a href="../pages/view_product.php" class="btn">Shop Now</a>
                 </div>
                 <div class="hero-dec-top"></div>
                 <div class="hero-dec-bottom"></div>
@@ -149,7 +149,7 @@
                 <div class="slider-detail">
                     <h1>Elevate Every Cup</h1>
                     <p>Join thousands who've discovered the remarkable benefits of black coffee.</p>
-                    <a href="../pages/view_products.php" class="btn">Shop Now</a>
+                    <a href="../pages/view_product.php" class="btn">Shop Now</a>
                 </div>
                 <div class="hero-dec-top"></div>
                 <div class="hero-dec-bottom"></div>
@@ -211,7 +211,7 @@
                 <div class="hero-content">
                     <h2>Discover the Power of Pure Black Coffee</h2>
                     <p>Freshly roasted, ethically sourced beans that bring rich flavor and natural energy to every cup. Experience coffee the way nature intended.</p>
-                    <a href="view_products.php" class="btn">Shop Now</a>
+                    <a href="view_product.php" class="btn">Shop Now</a>
                 </div>
             </div>
 
@@ -219,22 +219,22 @@
 
                 <div class="box">
                     <img src="../assets/images/image5.svg" alt="">
-                    <a href="view_products.php" class="btn">Shop Now</a>
+                    <a href="view_product.php" class="btn">Shop Now</a>
                 </div>
 
                 <div class="box">
                     <img src="../assets/images/image6.svg" alt="">
-                    <a href="view_products.php" class="btn">Shop Now</a>
+                    <a href="view_product.php" class="btn">Shop Now</a>
                 </div>
 
                 <div class="box">
                     <img src="../assets/images/image7.svg" alt="">
-                    <a href="view_products.php" class="btn">Shop Now</a>
+                    <a href="view_product.php" class="btn">Shop Now</a>
                 </div>
 
                 <div class="box">
                     <img src="../assets/images/image8.svg" alt="">
-                    <a href="view_products.php" class="btn">Shop Now</a>
+                    <a href="view_product.php" class="btn">Shop Now</a>
                 </div>
 
             </div>

@@ -112,6 +112,7 @@
     <link rel="stylesheet" href="../assets/css/header.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../assets/css/view_product.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="../assets/css/footer.css?v=<?php echo time(); ?>">
+    <img src="../assets/images/productimages/<?php echo $item['image_source']; ?>" alt="item image">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>

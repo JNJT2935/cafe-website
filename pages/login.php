@@ -6,7 +6,7 @@ session_start();
 if (isset($_SESSION['user_id'])) {
 
     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'admin') {
-        header("Location: ../admin/admin.php");
+        header("Location: admin.php");
     } else {
         header("Location: home.php");
     }
@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
 
             // ---- ADMIN OR USER REDIRECT ----
             if ($row['User_type'] === 'admin') {
-                header("Location: ../admin/admin.php");
+                header("Location: admin.php");
             } else {
                 header("Location: home.php");
             }
