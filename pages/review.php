@@ -11,56 +11,6 @@
     $success_msg = [];
     $warning_msg = [];
 
-    // Handle review submission
-    if (isset($_POST['submit_review'])) {
-        $product_id = intval($_POST['product_id']);
-        $rating     = intval($_POST['rating']);
-        $comment    = htmlspecialchars(trim($_POST['comment']));
-
-        // Validate rating
-        if ($rating < 1 || $rating > 5) {
-            $warning_msg[] = "Please select a rating between 1 and 5 stars.";
-        } elseif (empty($comment)) {
-            $warning_msg[] = "Please write a review comment.";
-        } else {
-            // Check if user has ordered this product and get a valid Order_id
-            // review table PK is (Product_id, Order_id) — no user_id column
-            $order_check = $conn->prepare("
-                SELECT o.Order_id
-                FROM order_item oi
-                JOIN `order` o ON oi.Order_id = o.Order_id
-                WHERE o.user_id = ? AND oi.Product_id = ?
-                LIMIT 1
-            ");
-            $order_check->execute([$user_id, $product_id]);
-            $order_row = $order_check->fetch(PDO::FETCH_ASSOC);
-
-            if (!$order_row) {
-                $warning_msg[] = "You can only review products you have purchased.";
-            } else {
-                $order_id = $order_row['Order_id'];
-
-                // Check if this (Product_id, Order_id) pair already has a review
-                $check = $conn->prepare("
-                    SELECT * FROM `review`
-                    WHERE Product_id = ? AND Order_id = ?
-                ");
-                $check->execute([$product_id, $order_id]);
-
-                if ($check->rowCount() > 0) {
-                    $warning_msg[] = "You have already reviewed this product.";
-                } else {
-                    $insert = $conn->prepare("
-                        INSERT INTO `review` (Product_id, Order_id, Rating, Comment)
-                        VALUES (?, ?, ?, ?)
-                    ");
-                    $insert->execute([$product_id, $order_id, $rating, $comment]);
-                    $success_msg[] = "Your review has been submitted. Thank you!";
-                }
-            }
-        }
-    }
-
     // Fetch all reviews with user name and product name
     // review has no user_id — join through order to get user name
     $all_reviews = $conn->prepare("
@@ -296,9 +246,9 @@
     <?php include('../assets/includes/footer.php'); ?>
     <?php include('../assets/includes/alert.php'); ?>
 
-    <script>
-    // Star rating label
-    const ratingLabels = {1:'Poor',2:'Fair',3:'Good',4:'Great',5:'Excellent'};
+   <script>
+    // ===== STAR RATING LABEL =====
+    const ratingLabels = {1:'Poor', 2:'Fair', 3:'Good', 4:'Great', 5:'Excellent'};
     document.querySelectorAll('.star-rating input').forEach(input => {
         input.addEventListener('change', () => {
             document.getElementById('ratingLabel').textContent =
@@ -306,7 +256,7 @@
         });
     });
 
-    // Character counter
+    // ===== CHARACTER COUNTER =====
     const textarea = document.querySelector('textarea[name="comment"]');
     if (textarea) {
         textarea.addEventListener('input', () => {
@@ -314,7 +264,7 @@
         });
     }
 
-    // Filter reviews by star rating
+    // ===== FILTER REVIEWS =====
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -326,6 +276,149 @@
             });
         });
     });
+
+    // FIX 3: JS escaping to prevent XSS
+    function escapeHTML(str) {
+        return String(str).replace(/[&<>"']/g, tag => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;',
+            '"': '&quot;', "'": '&#39;'
+        }[tag]));
+    }
+
+    // ===== AJAX FORM SUBMISSION =====
+    const reviewForm = document.getElementById('reviewForm');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const submitBtn = reviewForm.querySelector('.submit-btn');
+            const formData  = new FormData(reviewForm);
+
+            if (!formData.get('product_id')) {
+                showToast('Please select a product.', 'warning'); return;
+            }
+            if (!formData.get('rating')) {
+                showToast('Please select a star rating.', 'warning'); return;
+            }
+            if (!formData.get('comment').trim()) {
+                showToast('Please write a review comment.', 'warning'); return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Submitting...';
+
+            // FIX 2: use relative path with ./
+            fetch('./submit_review.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    reviewForm.reset();
+                    document.getElementById('ratingLabel').textContent = 'Click a star to rate';
+                    document.getElementById('charCount').textContent   = '0';
+
+                    addReviewCard(data.review);
+                    updateStats();
+                } else {
+                    showToast(data.message, 'warning');
+                }
+            })
+            .catch(() => showToast('Something went wrong. Please try again.', 'warning'))
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bx bx-send"></i> Submit Review';
+            });
+        });
+    }
+
+    // ===== ADD REVIEW CARD TO GRID =====
+    function addReviewCard(review) {
+        let grid = document.getElementById('reviewsGrid');
+
+        // If grid doesn't exist yet (no reviews before), create it
+        if (!grid) {
+            const noReviews = document.querySelector('.no-reviews');
+            if (noReviews) noReviews.remove();
+            grid = document.createElement('div');
+            grid.className = 'reviews-grid';
+            grid.id = 'reviewsGrid';
+            document.querySelector('.all-reviews').appendChild(grid);
+        }
+
+        const stars = Array.from({length: 5}, (_, i) =>
+            `<i class="bx bxs-star ${i < review.rating ? 'filled' : 'empty'}"></i>`
+        ).join('');
+
+        const labels = {1:'Poor', 2:'Fair', 3:'Good', 4:'Great', 5:'Excellent'};
+
+        const card = document.createElement('div');
+        card.className = 'review-card';
+        card.dataset.rating = review.rating;
+        card.innerHTML = `
+            <div class="review-header">
+                <div class="reviewer-avatar">${escapeHTML(review.user_name.charAt(0).toUpperCase())}</div>
+                <div class="reviewer-info">
+                    <h4>${escapeHTML(review.user_name)}</h4>
+                    <span class="review-date">${escapeHTML(review.date)}</span>
+                </div>
+                <div class="stars-display">${stars}</div>
+            </div>
+            <div class="review-product-tag">
+                <i class="bx bxs-coffee"></i> ${escapeHTML(review.product_name)}
+            </div>
+            <p class="review-comment">"${escapeHTML(review.comment)}"</p>
+            <div class="rating-badge rating-${review.rating}">${labels[review.rating]}</div>
+            <div class="your-review-tag"><i class="bx bx-check-circle"></i> Your Review</div>
+        `;
+        grid.prepend(card);
+    }
+
+    // FIX 6: Update stats bar dynamically after submission
+    function updateStats() {
+        const statNums = document.querySelectorAll('.stat-num');
+
+        // Total reviews = first stat
+        const totalEl = statNums[0];
+        if (totalEl) totalEl.textContent = parseInt(totalEl.textContent) + 1;
+
+        // Recalculate average from all visible cards
+        const allRatings = [...document.querySelectorAll('.review-card')]
+            .map(c => parseInt(c.dataset.rating));
+        if (allRatings.length > 0) {
+            const avg = (allRatings.reduce((a, b) => a + b, 0) / allRatings.length).toFixed(1);
+            const avgEl = statNums[1];
+            if (avgEl) avgEl.textContent = avg;
+        }
+    }
+
+    // ===== TOAST NOTIFICATION =====
+    function showToast(message, type) {
+        const existing = document.querySelector('.ajax-toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'ajax-toast';
+        toast.style.cssText = `
+            position: fixed; bottom: 30px; right: 30px;
+            padding: 14px 24px; border-radius: 10px;
+            font-size: 0.95rem; font-weight: 600;
+            z-index: 9999; box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: ${type === 'success' ? '#d6ffd6' : '#fff3cd'};
+            color:       ${type === 'success' ? '#066f06' : '#856404'};
+            border: 1px solid ${type === 'success' ? '#83c583' : '#ffc107'};
+            transition: opacity 0.4s ease;
+        `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 400);
+        }, 3500);
+    }
     </script>
 </body>
 </html>
