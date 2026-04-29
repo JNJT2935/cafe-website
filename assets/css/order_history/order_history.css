@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #BA9D8A;
+    min-height: 100vh; /* ensures full viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* pushes footer down */
+    padding: 20px;
+}
+
+main h2 {
+    margin: 30px;
+    text-align: left;
+}
+
+.order-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px ;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    max-width: 1000px; /* limit width */
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    align-items: center;
+    margin-bottom: auto;
+}
+
+.order-header span:first-child {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.order-items p {
+    margin: 4px auto;
+    color: #a36b6b;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.order-footer span:last-child {
+    font-weight: bold;
+    font-size: 18px;
+    color: #d9534f; /* highlight total */
+}
+
+/* STATUS COLORS */
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Pending = Blue */
+.status.pending {
+    background: #e0f0ff;
+    color: #007bff;
+}
+
+/* Out for delivery = yellow */
+.status.in {
+    background: #e0f0ff;
+    color: #00c8ff;
+}
+
+/* Out for delivery = yellow */
+.status.out {
+    background: #fbf9da;
+    color: #ffd500;
+}
+
+/* Completed / Done = Green */
+.status.completed,
+.status.done {
+    background: #e6f9ec;
+    color: #28a745;
+}
+
+/* Out for cancel = yellow */
+.status.cancel {
+    background: #ffd7d7;
+    color: #ff0000;
+}
+
+.empty {
+    box-sizing: border-box;
+    text-align: center;
+    margin: 100px 100px;
+    color: #1d0505;
+}
