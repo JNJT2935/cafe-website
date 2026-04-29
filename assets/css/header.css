@@ -1,22 +1,27 @@
-/* ===== HEADER BAR ===== */
+/* ===== RESET ===== */
 html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    font-family: Arial, sans-serif;
 }
+
 * {
     box-sizing: border-box;
 }
+
+/* ===== HEADER ===== */
 .main-header {
-    width: 100%;
-    height: 90px;
+    width: 101%;
+    left: -5px;
+    height: 80px;
     padding: 0 60px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    position: sticky;
+    position: top;
     top: 0;
     z-index: 1000;
 
@@ -29,9 +34,10 @@ html, body {
 /* ===== LOGO ===== */
 .logo {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 10px;
-    font-size: 28px;
+
+    font-size: 26px;
     font-weight: 700;
     color: #3e2e1f;
     text-decoration: none;
@@ -43,18 +49,19 @@ html, body {
     object-fit: contain;
 }
 
-/* ===== NAVIGATION ===== */
+/* ===== NAVBAR ===== */
 .navbar {
     display: flex;
-    gap: 100px;
+    gap: 60px;
 }
 
 .navbar a {
     text-decoration: none;
     color: #3e2e1f;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
     transition: 0.3s ease;
+    position: relative;
 }
 
 .navbar a:hover {
@@ -64,19 +71,32 @@ html, body {
 .navbar a.active {
     color: #e8670b;
     font-weight: 700;
-    position: relative;
 }
 
-/* ===== RIGHT ICON SECTION ===== */
+/* underline effect */
+.navbar a.active::after,
+.navbar a:hover::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background: #e8670b;
+}
+
+/* ===== RIGHT ICONS ===== */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 20px;
 }
 
 .header-icon {
-    font-size: 24px;
+    font-size: 22px;
     color: #3e2e1f;
+    text-decoration: none;
+    position: relative;
     transition: 0.3s ease;
 }
 
@@ -84,9 +104,61 @@ html, body {
     color: #e8670b;
 }
 
-/* ===== Responsive (optional) ===== */
+/* counters (cart / wishlist) */
+.header-icon sup {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+
+    background: #e8670b;
+    color: white;
+    font-size: 11px;
+
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+/* ===== USER BOX ===== */
+.user-box {
+    position: absolute;
+    top: 90px;
+    right: 60px;
+
+    background: white;
+    padding: 15px;
+    width: 220px;
+
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+
+    display: none;
+}
+
+.user-box.active {
+    display: block;
+}
+
+.logout-btn, .login-btn {
+    display: block;
+    margin-top: 10px;
+    padding: 8px;
+    text-align: center;
+
+    background: #e8670b;
+    color: white;
+    text-decoration: none;
+
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 850px) {
     .navbar {
-        display: none; /* mobile menu coming later if u want */
+        display: none;
+    }
+
+    .main-header {
+        padding: 0 20px;
     }
 }
