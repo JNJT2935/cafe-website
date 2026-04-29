@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1.0">
     <title>Coffee Shop Home Page</title>
-    <link rel="stylesheet" type="text/css" href="/assets/css/menu.css">
+    <link rel="stylesheet" type="text/css" href="..\assets\css\menu.css">
+    <link rel="stylesheet" href="..\assets\css\header.css">
 </head>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -68,13 +69,15 @@ $(document).ready(function () {
 <div class="toast"></div>
 
 <body>
+
+<?php include '..\assets\includes\header.php'; ?>
 <h1 class="menu-title">Our Coffee Menu</h1>
 
 <div class="menu-container">
 
     
         <div class="menu-card">
-            <img src="/assets/images/menu/espresso.jpg" alt="Espresso">
+            <img src="../assets/images/menu/espresso.jpg" alt="Espresso">
         
             <h3>ESPRESSO</h3>
             <h4>AVAILABLE</h4>
@@ -93,7 +96,7 @@ $(document).ready(function () {
 
     <div class="menu-item">
         <div class="menu-card">
-            <img src="/assets/images/menu/macchiato.jpg" alt="Machiato">
+            <img src="../assets/images/menu/macchiato.jpg" alt="Machiato">
         
             <h3>MACHIATO</h3>
             <h4>AVAILABLE</h4>
@@ -113,7 +116,7 @@ $(document).ready(function () {
 
     <div class="menu-item">
         <div class="menu-card">
-            <img src="/assets/images/menu/americano.jpg" alt="Americano">
+            <img src="../assets/images/menu/americano.jpg" alt="Americano">
         
             <h3>AMERICANO</h3>
             <h4>AVAILABLE</h4>
@@ -133,7 +136,7 @@ $(document).ready(function () {
 
     <div class="menu-item">
         <div class="menu-card">
-            <img src="/assets/images/menu/coffeelatte.jpg" alt="Coffee Latte">
+            <img src="../assets/images/menu/coffeelatte.jpg" alt="Coffee Latte">
         
             <h3>COFFEE LATTE</h3>
             <h4>AVAILABLE</h4>
@@ -153,7 +156,7 @@ $(document).ready(function () {
 
     <div class="menu-item">
         <div class="menu-card">
-            <img src="/assets/images/menu/capuccino.jpg" alt="Cappuccino">
+            <img src="../assets/images/menu/capuccino.jpg" alt="Cappuccino">
         
             <h3>CAPPUCCINO</h3>
             <h4>AVAILABLE</h4>
@@ -173,7 +176,7 @@ $(document).ready(function () {
 
     <div class="menu-item">
         <div class="menu-card">
-            <img src="/assets/images/menu/affogato.jpeg" alt="Affogato">
+            <img src="../assets/images/menu/affogato.jpeg" alt="Affogato">
         
             <h3>AFFOGATO</h3>
             <h4>AVAILABLE</h4>

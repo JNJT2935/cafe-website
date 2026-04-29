@@ -5,11 +5,11 @@
 }
 
 body {
-    background-image: url(/assets/images/menu/bg_2.jpg);
+    background-image: url(../images/menu/bg_2.jpg);
     backdrop-filter: blur(10px);
     background-size: cover;
     background-position: center;
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 40px;
 }
 
