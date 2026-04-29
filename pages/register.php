@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     <title>Coffee Shop - Register</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css?v=<?php echo time(); ?>">
-    <link rel="stylesheet" href="../assets/css/header.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../assets/css/header_login_register.css?v=<?php echo time(); ?>">
 
     <style>
         .password-wrapper {

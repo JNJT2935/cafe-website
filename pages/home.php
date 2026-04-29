@@ -21,7 +21,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noindex, nofollow">
         <title>Coffee Shop - Home Page</title>
-        <link rel="stylesheet" href="../assets/css/header.css?v=<?php echo time(); ?>">
+        <link rel="stylesheet" href="../assets/css/header_login_register.css?v=<?php echo time(); ?>">
         <link rel="stylesheet" href="../assets/css/home.css?v=<?php echo time(); ?>">
         <link rel="stylesheet" href="../assets/css/footer.css?v=<?php echo time(); ?>">
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
