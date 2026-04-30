@@ -1,7 +1,15 @@
 <?php
+// Only allow admins
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+    header('Location: ../pages/login.php');
+    exit();
+}
+
+$admin_name = $_SESSION['user_name'] ?? 'Admin';
+
 include('../backend/database/dbconnect.php');
 
-//sanitise form ionput
+//sanitise form input
 
 if (isset($_POST['submit'])) {
   $product_name = filter_var($_POST["pName"], FILTER_SANITIZE_SPECIAL_CHARS);

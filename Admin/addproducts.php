@@ -12,6 +12,13 @@
 </header>
     <!-- Prototype code for testing -->
 <?php
+//admin authentication
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
+    header('Location: ../pages/login.php');
+    exit();
+}
+
+$admin_name = $_SESSION['user_name'] ?? 'Admin';
 
 include('../backend/database/dbconnect.php');
 
