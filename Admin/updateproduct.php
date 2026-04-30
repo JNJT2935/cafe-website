@@ -1,45 +1,27 @@
 <?php
-include('../backend/database/database.php');
+include('../backend/database/dbconnect.php');
+
+//sanitise form ionput
 
 if (isset($_POST['submit'])) {
   $product_name = filter_var($_POST["pName"], FILTER_SANITIZE_SPECIAL_CHARS);
   $price = filter_var($_POST["pPrice"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-  $stock = filter_var($_POST["stock"], FILTER_SANITIZE_NUMBER_INT);
-  $id = filter_var($_POST["Product_id"], FILTER_SANITIZE_NUMBER_INT);
+  $id = filter_var($_POST["item_id"], FILTER_SANITIZE_NUMBER_INT);
   $desc = filter_var($_POST["pDescription"], FILTER_SANITIZE_SPECIAL_CHARS);
-  $visible = filter_var($_POST["Visible"], FILTER_SANITIZE_NUMBER_INT);
-  $category = filter_var($_POST["categories"], FILTER_SANITIZE_NUMBER_INT);
 
-  if ($category == 1){
-    $categorytext = "Hot Drinks";
-  } elseif ($category == 2){
-    $categorytext == "Cold Drinks";
-  } elseif ($category == 3){
-    $categorytext == "Dessert";
-  } elseif ($category == 4){
-    $categorytext == "Pastries";
-  } elseif ($category == ""){
-    $query = "SELECT category FROM product WHERE Product_id = $id";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-      while($row = mysqli_fetch_assoc($result)) {
-        $category = $row["category"];
-      }
-    }
-  }  else{
-    die("Category not selected/invalid");
-  }
+  //Make sure that leaving spaces blank will not erase fields
+
   if ($product_name == ""){
-    $query = "SELECT name FROM product WHERE Product_id = $id";
+    $query = "SELECT item_name FROM menu_items WHERE item_id = $id";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
-        $product_name = $row["name"];
+        $product_name = $row["item_name"];
       }
     }
   }
   if ($desc == ""){
-    $query = "SELECT description FROM product WHERE Product_id = $id";
+    $query = "SELECT description FROM menu_items WHERE item_id = $id";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
@@ -47,17 +29,8 @@ if (isset($_POST['submit'])) {
       }
     }
   }
-  if ($stock == ""){
-    $query = "SELECT stock_quantity FROM product WHERE Product_id = $id";
-    $result = mysqli_query($conn, $query);
-    if (mysqli_num_rows($result) > 0) {
-      while($row = mysqli_fetch_assoc($result)) {
-        $stock = $row["stock_quantity"];
-      }
-    }
-  }
   if ($price == ""){
-    $query = "SELECT price FROM product WHERE Product_id = $id";
+    $query = "SELECT price FROM menu_items WHERE item_id = $id";
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
@@ -67,9 +40,9 @@ if (isset($_POST['submit'])) {
   }
 
 
-  $query = "UPDATE product SET name = ?, category = ?, description = ?, stock_quantity = ?, price = ?, Visible_on_website = ? WHERE Product_id = ?;";
+  $query = "UPDATE menu_items SET item_name = ?, description = ?, price = ? WHERE item_id = ?;";
   $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "sssidii", $product_name, $category, $desc , $stock, $price, $visible, $id);
+  mysqli_stmt_bind_param($stmt, "ssdi", $product_name, $desc, $price, $id);
   if (mysqli_stmt_execute($stmt)) {
     echo "Record updated successfully";
   } else {
@@ -82,7 +55,7 @@ if (isset($_POST['submit'])) {
 <html>
 
 <header class="main-header">
-    <link rel="stylesheet" href="..\assets\css\header.css">
+    <link rel="stylesheet" href="..\assets\css\review.css">
     
     <div class="header-left">
         <!-- LOGO -->
@@ -99,14 +72,14 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-  <h1 style="text-align:center;">Write the product number for which the product is updated</h1> 
+  <h1 style="text-align:center;">Write the product number for which the product is to be updated</h1> 
   <form action="" method="POST" enctype="multipart/form-data" >
     <div class="box" style="width:360px;height:500px;border:.5px;margin: 0 auto;">
 
       &nbsp;<br>*Product Number<br>&nbsp;
-      <input name="Product_id" class="input" size="36" style="height:35px" type="text" maxlength="11" required placeholder="0">
+      <input name="item_id" class="input" size="36" style="height:35px" type="text" maxlength="11" required placeholder="0">
 
-      &nbsp;<br>*Product Name<br>&nbsp;
+      &nbsp;<br>Product Name<br>&nbsp;
       <input name="pName" class="input" size="36" style="height:35px" type="text">
 
       <br><br>&nbsp;Purchase Price<br>&nbsp;
@@ -115,23 +88,6 @@ if (isset($_POST['submit'])) {
       <br><br>&nbsp;Description<br>&nbsp;
       <input name="pDescription" class="input" size="36" style="height:35px" min="0" type="text">
 
-      <br><br>&nbsp;Stock Status<br>&nbsp;
-      <input name="stock" class="input" size="36" style="height:35px" min="0" type="int" placeholder="0">
-
-      <br><br>&nbsp;Toggle delete<br>&nbsp;
-      <select name="Visible" id="Visible" style="width:254px;background-color:#f1f6fa;border-radius:10px;color:#303841;" required>
-        <option value=1>Keep listing</option>
-        <option value=0>Hide listing</option>
-      </select>
-
-      <br><br>&nbsp;Category<br>&nbsp;
-      <select name="categories" id="categories" style="width:254px;background-color:#f1f6fa;border-radius:10px;color:#303841;">
-        <option value="">Select a category</option>
-        <option value=1>Hot Drinks</option>
-        <option value=2>Cold Drinks</option>
-        <option value=3>Dessert</option>
-        <option value=4>Pastries</option>
-      </select>
 
       <br><br>&nbsp;&nbsp;&nbsp;
 
