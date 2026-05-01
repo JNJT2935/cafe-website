@@ -203,14 +203,14 @@ $admin_name = $_SESSION['user_name'] ?? 'Admin';
                 <span class="arrow">Go to Orders →</span>
             </a>
 
-            <a href="addproducts.php" class="card add">
+            <a href="..\Admin\addproducts.php" class="card add">
                 <div class="icon"><i class="fa-solid fa-plus"></i></div>
                 <h3>Add Product</h3>
                 <p>Add new coffee drinks, snacks, or other items to the menu.</p>
                 <span class="arrow">Add Product →</span>
             </a>
 
-            <a href="updateproduct.php" class="card update">
+            <a href="..\Admin\updateproduct.php" class="card update">
                 <div class="icon"><i class="fa-solid fa-pen-to-square"></i></div>
                 <h3>Update Product</h3>
                 <p>Edit prices, stock, descriptions, or hide existing products.</p>
