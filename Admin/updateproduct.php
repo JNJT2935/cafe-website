@@ -33,7 +33,7 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
-        $category = $row["category"];
+        $categorytext = $row["category"];
       }
     }
   }  else{
@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
 
   $query = "UPDATE product SET name = ?, category = ?, description = ?, stock_quantity = ?, price = ?, Visible_on_website = ? WHERE Product_id = ?;";
   $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "sssidii", $product_name, $category, $desc , $stock, $price, $visible, $id);
+  mysqli_stmt_bind_param($stmt, "sssidii", $product_name, $categorytext, $desc , $stock, $price, $visible, $id);
   if (mysqli_stmt_execute($stmt)) {
     mysqli_stmt_close($stmt);
     $user_id = $_SESSION['user_id'];
