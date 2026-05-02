@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $query = "INSERT INTO product (Product_id, name, category, image_source, description, stock_quantity, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
   $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "issssid", $id, $product_name, $category, $filename, $desc , $stock, $price);
+  mysqli_stmt_bind_param($stmt, "issssid", $id, $product_name, $categorytext, $filename, $desc , $stock, $price);
   if (mysqli_stmt_execute($stmt)) {
     mysqli_stmt_close($stmt);
     $user_id = $_SESSION['user_id'];
