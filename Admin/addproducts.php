@@ -10,23 +10,25 @@
         </a>
     </div>
 </header>
-    <!-- Prototype code for testing -->
 <?php
-//admin authentication
+
+include('../backend/database/db.php');
+
+session_start();
+// Only allow admins
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
     header('Location: ../pages/login.php');
     exit();
 }
-
-$admin_name = $_SESSION['user_name'] ?? 'Admin';
-
-include('../backend/database/dbconnect.php');
-
+if (isset($_SESSION['message'])) {
+    echo '<p>' . $_SESSION['message'] . '</p>';
+    unset($_SESSION['message']);
+}
 //image upload
-if (isset($_POST['submit'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $filename = $_FILES["file"]["name"];
   $tempname = $_FILES["file"]["tmp_name"];
-  $folder = "../assets/images/menu/" . $filename;
+  $folder = "../assets/images/productimages/" . $filename;
 
   if ($_FILES["file"]["error"] !== UPLOAD_ERR_OK) {
     if ($_FILES["file"]["error"] == 4) {
@@ -43,20 +45,43 @@ if (isset($_POST['submit'])) {
   }
 
   //Sanitize form input
-
-  $item_name = filter_var($_POST["pName"], FILTER_SANITIZE_SPECIAL_CHARS);
+  $category = filter_var($_POST["categories"], FILTER_SANITIZE_NUMBER_INT);
+  if ($category == 1){
+    $categorytext = "Hot Drinks";
+  } elseif ($category == 2){
+    $categorytext = "Cold Drinks";
+  } elseif ($category == 3){
+    $categorytext = "Dessert";
+  } elseif ($category == 4){
+    $categorytext = "Pastries";
+  }  else{
+    die("Category not selected/invalid");
+  }
+  $product_name = filter_var($_POST["pName"], FILTER_SANITIZE_SPECIAL_CHARS);
   $price = filter_var($_POST["pPrice"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+  $stock = filter_var($_POST["stock"], FILTER_SANITIZE_NUMBER_INT);
+  $id = filter_var($_POST["Product_id"], FILTER_SANITIZE_NUMBER_INT);
   $desc = filter_var($_POST["pDescription"], FILTER_SANITIZE_SPECIAL_CHARS);
 
-  $query = "INSERT INTO menu_items (item_name, image, description, price) VALUES (?, ?, ?, ?)";
+  $query = "INSERT INTO product (Product_id, name, category, image_source, description, stock_quantity, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
   $stmt = mysqli_prepare($conn, $query);
-  mysqli_stmt_bind_param($stmt, "sssd", $item_name, $filename, $desc , $price);
+  mysqli_stmt_bind_param($stmt, "issssid", $id, $product_name, $category, $filename, $desc , $stock, $price);
   if (mysqli_stmt_execute($stmt)) {
-    header("Location: ../pages/Home_Page.php");
+    mysqli_stmt_close($stmt);
+    $user_id = $_SESSION['user_id'];
+    $modification_status = "Added";
+    $query = "INSERT INTO manage_product (user_id, Product_id, modification_status) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "iis", $user_id, $id, $modification_status);
+    mysqli_stmt_execute($stmt);
+    $_SESSION['message'] = "Success! Your entry has been saved.";
+    header("Location: " . $_SERVER['PHP_SELF']);
   } else {
     echo "Error occurred while inserting data.";
   }
   mysqli_stmt_close($stmt);
+  
+  exit(); 
 }
 
 ?>
@@ -71,6 +96,9 @@ if (isset($_POST['submit'])) {
   <form action="" method="POST" enctype="multipart/form-data" >
     <div class="box" style="width:360px;height:500px;border:.5px;margin: 0 auto;">
 
+      &nbsp;<br>*Product Number<br>&nbsp;
+      <input name="Product_id" class="input" size="36" style="height:35px" type="text" maxlength="11" required placeholder="0">
+
       &nbsp;<br>*Product Name<br>&nbsp;
       <input name="pName" class="input" size="36" style="height:35px" type="text" required>
 
@@ -80,8 +108,20 @@ if (isset($_POST['submit'])) {
       <br><br>&nbsp;Description<br>&nbsp;
       <input name="pDescription" class="input" size="36" style="height:35px" min="0" type="text">
 
+      <br><br>&nbsp;Stock Status<br>&nbsp;
+      <input name="stock" class="input" size="36" style="height:35px" min="0" type="int" placeholder="0">
+
       <br><br>&nbsp;Product Image<br>&nbsp;
       <input name="file" class="input" size="36" style="height:35px" type="file" accept="image/*">
+
+      <br><br>&nbsp;Category<br>&nbsp;
+      <select name="categories" id="categories" style="width:254px;background-color:#f1f6fa;border-radius:10px;color:#303841;" required>
+        <option value="">Select a category</option>
+        <option value=1>Hot Drinks</option>
+        <option value=2>Cold Drinks</option>
+        <option value=3>Dessert</option>
+        <option value=4>Pastries</option>
+      </select>
 
       <br><br>&nbsp;&nbsp;&nbsp;
 
