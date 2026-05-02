@@ -30,7 +30,7 @@
 
     <!-- BACK -->
     <div class="back-link">
-        <a href="../pages/home.php" class="back-btn">← Back to Dashboard</a>
+        <a href="../pages/admin.php" class="back-btn">← Back to Dashboard</a>
     </div>
 
     <h2>Manage Orders</h2>

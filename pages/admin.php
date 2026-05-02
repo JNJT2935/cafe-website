@@ -196,7 +196,7 @@ $admin_name = $_SESSION['user_name'] ?? 'Admin';
 
         <div class="cards">
 
-            <a href="admin_manage_order.php" class="card orders">
+            <a href="..\Admin\manage_orders.php" class="card orders">
                 <div class="icon"><i class="fa-solid fa-box"></i></div>
                 <h3>Manage Orders</h3>
                 <p>View, update, and track all customer orders and delivery statuses.</p>
