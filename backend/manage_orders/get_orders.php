@@ -1,5 +1,5 @@
 <?php
-require "../config/db.php";
+require "../backend/database/db.php";
 
 try {
 
