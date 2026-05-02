@@ -9,7 +9,7 @@ let currentOrder = null;
 ========================= */
 function loadOrders(){
 
-    $.get("../backend/get_orders.php", function(data){
+    $.get("../backend/manage_orders/get_orders.php", function(data){
 
         let html = "";
 
@@ -61,7 +61,7 @@ $(document).on("click", "tr", function(e){
     let id = $(this).data("id");
     if(!id) return;
 
-    $.get("../backend/get_order.php", { order_id: id }, function(data){
+    $.get("../backend/manage_orders/get_order.php", { order_id: id }, function(data){
 
         currentOrder = data;
 
@@ -122,7 +122,7 @@ $(document).on("click", ".save-btn", function(e){
     let id = $(this).data("id");
     let status = row.find(".status-dropdown").val();
 
-    $.post("../backend/update_order.php", {
+    $.post("../backend/manage_orders/update_order.php", {
         id: id,
         status: status
     }, function(){
