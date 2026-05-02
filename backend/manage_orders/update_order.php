@@ -1,5 +1,5 @@
 <?php
-require "../config/db.php";
+require "../backend/database/db.php";
 
 if(isset($_POST['id']) && isset($_POST['status'])){
 
