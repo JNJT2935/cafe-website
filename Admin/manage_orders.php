@@ -19,7 +19,7 @@
 <!-- HEADER -->
 <header class="main-header">
     <div class="header-left">
-        <a href="../pages/Home_Page.php" class="logo">
+        <a href="../pages/home.php" class="logo">
         <img src="../assets/images/header_icon/coffee_logo.svg" alt="Coffee Shop Logo">
         <span>Coffee Shop</span>
         </a>
@@ -30,7 +30,7 @@
 
     <!-- BACK -->
     <div class="back-link">
-        <a href="../pages/Home_Page.php" class="back-btn">← Back to Dashboard</a>
+        <a href="../pages/home.php" class="back-btn">← Back to Dashboard</a>
     </div>
 
     <h2>Manage Orders</h2>
