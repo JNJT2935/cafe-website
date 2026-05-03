@@ -9,7 +9,7 @@ body {
     backdrop-filter: blur(10px);
     background-size: cover;
     background-position: center;
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 40px;
 }
 
@@ -46,13 +46,14 @@ body {
 
 .menu-card img {
     width: 150px;
-    height: 150px;
-    border-radius: 15px;
+    height: 152.2px;
+    border-radius: 10px;
     object-fit: cover;
     margin-right: 20px;
+    margin-top: -0.1px;
     transform: scale(1.27);
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 18px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     border: 1px solid rgba(5, 5, 5, 1);
@@ -157,10 +158,11 @@ body {
     pointer-events: none;
 }
 
-.footer_background {
-    background-color: #3D240C; }
-
 .toast.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+.footer_background {
+    background-color: #3D240C;
 }
