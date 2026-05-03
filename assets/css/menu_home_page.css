@@ -5,7 +5,7 @@
 }
 
 body {
-    background-image: url(/assets/images/menu/bg_1.jpg);
+    background-image: url(../images/menu/bg_1.jpg);
     color: white;
     background-size: cover;
     background-position: center;

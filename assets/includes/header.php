@@ -49,7 +49,7 @@ if ($user_id) {
 
     <nav class="navbar">
         <a href="../pages/home.php" class="<?= $current_page == 'home.php' ? 'active' : '' ?>">Home</a>
-        <a href="../pages/fullmenu.php" class="<?= $current_page == 'menu.php' ? 'active' : '' ?>">Menu</a>
+        <a href="../pages/menu_home_page.php" class="<?= $current_page == 'menu.php' ? 'active' : '' ?>">Menu</a>
         <a href="../pages/review.php" class="<?= $current_page == 'review.php' ? 'active' : '' ?>">Review</a>
         <a href="../pages/contacts.php" class="<?= $current_page == 'aboutUs.php' ? 'active' : '' ?>">About Us</a>
     </nav>
